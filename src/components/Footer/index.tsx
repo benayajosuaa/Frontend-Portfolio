@@ -28,24 +28,33 @@ export default function Footer (){
                             <div>
                                 <h1 className="text-2xl"> Karawaci, Banten <br/>Indonesia </h1>
                             </div>
-                            <div className="flex flex-row gap-x-3 text-3xl  items-center">
+                            {/* <div className="flex flex-row gap-x-3 text-3xl  items-center">
                                 <span> <AiOutlineSpotify /> </span>
                                 <span className="text-4xl"> <LiaLinkedin /> </span>
                                 <span> <FaInstagram /> </span>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                     <div className=" p-10">
-                        <div className="flex flex-row gap-x-30 text-lg pr-20">
-                            <div className="flex flex-col gap-y-2">
+                        <div className="flex flex-row gap-x-20 text-lg">
+                            {/* about ben */}
+                            <div className="flex flex-col gap-y-">
                                 <span className="pb-3 font-bold"> <h1>About Ben</h1></span>
                                 <span> <Link href=""> My Work </Link> </span>
                                 <span> <Link href="">Journey </Link> </span>
                             </div>
+                            {/* brainrot */}
                             <div className="flex flex-col gap-y-2">
                                 <span className="pb-3 font-bold"> <h1>About Ben</h1></span>
                                 <span> <Link href=""> Github </Link> </span>
                                 <span> <Link href=""> Medium </Link> </span>
+                            </div>
+                            {/* social */}
+                            <div className="flex flex-col gap-y-2">
+                                <span className="pb-3 font-bold"> <h1>Social</h1></span>
+                                <span> <Link href=""> Instagram </Link> </span>
+                                <span> <Link href=""> Linkedin </Link> </span>
+                                <span> <Link href=""> Spotify </Link> </span>
                             </div>
                         </div>
                     </div>
@@ -53,9 +62,9 @@ export default function Footer (){
                
                 
                 {/* Credit */}
-                <div className="flex items-center justify-center">
+                <div className="flex items-center justify-center pt-20">
                     <h1 className="text-lg">
-                        2025 © halobenaya — still building and still learning
+                        2026 © halobenaya — still building and still learning
                     </h1>
                 </div>
             </div>
