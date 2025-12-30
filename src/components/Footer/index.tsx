@@ -1,73 +1,85 @@
-
 import Link from "next/link"
 import { Montserrat } from "next/font/google"
-import { AiOutlineSpotify } from "react-icons/ai";
-import { FaInstagram } from "react-icons/fa6";
-import { LiaLinkedin } from "react-icons/lia";
+import { FaInstagram } from "react-icons/fa";
+import { FaLinkedin } from "react-icons/fa";
+import { AiFillSpotify } from "react-icons/ai";
 
-
-const montserratFont = Montserrat ({
-    subsets :["latin"],
-    weight : "400",
+const montserratFont = Montserrat({
+  subsets: ["latin"],
+  weight: "400",
 })
 
+export default function Footer() {
+  return (
+    <footer className={`${montserratFont.className} bg-gray-100`}>
 
-export default function Footer (){
-    return (
-        <div className={`${montserratFont.className}`}>
-            <div className="p-15 bg-gray-100">
-                <div className="flex flex-row justify-between">
+      <div className="p-5 pt-15 md:p-20 md:pb-10">
 
-                    <div className="p-10">
-                        <div className="flex flex-col gap-y-10">
-                            {/* Logo */}
-                            <div>
-                                <img src="/logo/benaya.png" alt="Logo Benaya" className="w-30 h-auto"/>
-                            </div>
-                            {/* Location */}
-                            <div>
-                                <h1 className="text-2xl"> Karawaci, Banten <br/>Indonesia </h1>
-                            </div>
-                            {/* <div className="flex flex-row gap-x-3 text-3xl  items-center">
-                                <span> <AiOutlineSpotify /> </span>
-                                <span className="text-4xl"> <LiaLinkedin /> </span>
-                                <span> <FaInstagram /> </span>
-                            </div> */}
-                        </div>
-                    </div>
-                    <div className=" p-10">
-                        <div className="flex flex-row gap-x-20 text-lg">
-                            {/* about ben */}
-                            <div className="flex flex-col gap-y-">
-                                <span className="pb-3 font-bold"> <h1>About Ben</h1></span>
-                                <span> <Link href=""> My Work </Link> </span>
-                                <span> <Link href="">Journey </Link> </span>
-                            </div>
-                            {/* brainrot */}
-                            <div className="flex flex-col gap-y-2">
-                                <span className="pb-3 font-bold"> <h1>About Ben</h1></span>
-                                <span> <Link href=""> Github </Link> </span>
-                                <span> <Link href=""> Medium </Link> </span>
-                            </div>
-                            {/* social */}
-                            <div className="flex flex-col gap-y-2">
-                                <span className="pb-3 font-bold"> <h1>Social</h1></span>
-                                <span> <Link href=""> Instagram </Link> </span>
-                                <span> <Link href=""> Linkedin </Link> </span>
-                                <span> <Link href=""> Spotify </Link> </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-               
-                
-                {/* Credit */}
-                <div className="flex items-center justify-center pt-20">
-                    <h1 className="text-lg">
-                        2026 © halobenaya — still building and still learning
-                    </h1>
-                </div>
+        <div className="flex flex-col gap-16 lg:flex-row lg:justify-between">
+
+          {/* Brand */}
+          <div className="flex flex-col gap-6 max-w-sm">
+            <img src="/logo/benaya.png" alt="Logo Benaya" className="w-32" />
+
+            <p className="text-lg leading-relaxed text-gray-700">
+              Karawaci, Banten <br />
+              Indonesia
+            </p>
+          </div>
+
+          {/* Navigation */}
+          <div className="grid grid-cols-2 md:gap-12 md:grid-cols-3 text-base">
+
+            <div className="flex flex-col gap-y-2">
+              <h3 className="font-semibold uppercase tracking-wider text-sm">links</h3>
+              <Link href="/portfolio" className="hover:opacity-60 transition">My Work</Link>
+              <Link href="/journey" className="hover:opacity-60 transition">Journey</Link>
+              <Link href="/contact" className="hover:opacity-60 transition">Contact</Link>
             </div>
+
+            <div className="flex flex-col gap-y-2">
+              <h3 className="font-semibold uppercase tracking-wider text-sm">Brain rot</h3>
+              <Link href="https://github.com/benayajosuaa" target="_blank" className="hover:opacity-60 transition">Github</Link>
+              <Link href="https://medium.com/@benaya.josua" target="_blank" className="hover:opacity-60 transition">Medium</Link>
+            </div>
+
+            <div className="flex">
+                {/* Desktop text links */}
+                <div className="hidden md:flex flex-col gap-y-2">
+                    <h3 className="font-semibold uppercase tracking-wider text-sm">Social</h3>
+                    <Link href="https://www.instagram.com/benayajosuaa/" target="_blank" className="hover:opacity-60 transition">
+                    Instagram
+                    </Link>
+                    <Link href="https://www.linkedin.com/in/benayasimamora/" target="_blank" className="hover:opacity-60 transition">
+                    LinkedIn
+                    </Link>
+                    <Link href="https://open.spotify.com/user/zeqxqspvmhgqmlkafjcrcx3n6" target="_blank" className="hover:opacity-60 transition">
+                    Spotify
+                    </Link>
+                </div>
+
+                {/* Mobile icon links */}
+                <div className="md:hidden flex flex-col gap-3 text-xl pt-10">
+                    <h3 className="font-semibold uppercase tracking-wider text-sm">Social</h3>
+                    <span className="md:hidden flex flex-row gap-x-3 text-[20px]">
+                        <Link href="https://www.instagram.com/benayajosuaa/" target="_blank"> <FaInstagram /> </Link>
+                        <Link href="https://www.linkedin.com/in/benayasimamora/" target="_blank"> <FaLinkedin /> </Link>
+                        <Link href="https://open.spotify.com/user/zeqxqspvmhgqmlkafjcrcx3n6" target="_blank"> <AiFillSpotify /> </Link>
+                    </span>
+                </div>
+
+            </div>
+
+
+          </div>
         </div>
-    )
+
+        {/* Divider */}
+        <div className="mt-20  border-gray-300 text-center text-sm text-gray-600">
+          2026 © halobenaya — still building and still learning
+        </div>
+
+      </div>
+    </footer>
+  )
 }

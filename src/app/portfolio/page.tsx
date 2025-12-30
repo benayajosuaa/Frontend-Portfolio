@@ -22,12 +22,12 @@ export default function HomePage() {
             {/* konten utama */}
             <div className="h-screen pt-20 flex flex-col bg-white">
                 <div className="flex flex-1/2 justify-center items-center">
-                    <div className="text-4xl font-thin">
+                    <div className="text-xl font-semibold md:text-4xl md:font-thin">
                         <DecryptedText
                             text="Coming Soon"
                             speed={100}
                             maxIterations={30}
-                            characters="qwertyuiop[]asdfghjkl;'zxcvbnm,./1234567890-="
+                            characters="ASDFGHJKLQWERTYUIOPZXCVBNMwertyuiopasdfghjklzxcvbnmqwertyuiop[]asdfghjkl;'zxcvbnm,./1234567890-="
                             className="revealed"
                             parentClassName="all-letters"
                             encryptedClassName="encrypted"
