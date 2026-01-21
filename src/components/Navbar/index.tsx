@@ -26,7 +26,7 @@ export default function NavigationBar() {
 
         {/* Logo */}
         <Link href="/">
-          <img src="/logo/benaya2.png" alt="Benaya" className="w-32" />
+          <img src="/logo/logobenv2.png" alt="Benaya" className="w-32" />
         </Link>
 
         {/* Desktop Menu */}

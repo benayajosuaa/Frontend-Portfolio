@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Benaya Josua",
+  title: "halobenaya",
   description: "Benaya Portfolio",
   icons: {
     icon: "/pagar.png",
