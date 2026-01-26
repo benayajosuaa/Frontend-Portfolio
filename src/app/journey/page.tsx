@@ -106,7 +106,7 @@ export default function HomePage() {
             </span>
             <span className="hidden md:block absolute bottom-10 left-10 z-20 text-white opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition">
               <h1 className="text-4xl font-semibold mb-2">Himpunan Informatika</h1>
-              <p className="text-xl">Dept. Eksternal 25/26</p>
+              <p className="text-xl">Head of Dept. Eksternal 25/26</p>
             </span>
           </div>
         </div>
