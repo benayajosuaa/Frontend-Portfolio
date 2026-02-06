@@ -44,7 +44,7 @@ export default function NavigationBar() {
 
         {/* Right */}
         <div className="flex items-center gap-4">
-          <Link href="" className="hidden md:block text-3xl text-gray-700 hover:text-black">
+          <Link href="/register" className="hidden md:block text-3xl text-gray-700 hover:text-black">
             <IoPersonCircleOutline />
           </Link>
 
