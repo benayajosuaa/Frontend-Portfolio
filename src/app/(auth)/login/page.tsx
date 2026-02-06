@@ -42,7 +42,7 @@ export default function LoginPage() {
       localStorage.setItem("token", data.token);
 
       // Redirect ke admin
-      router.push("/admin/journey");
+      router.push("/admin");
     } catch (err) {
       console.error(err);
       setError("Terjadi kesalahan, coba lagi");

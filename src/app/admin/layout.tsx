@@ -1,40 +1,6 @@
-// // src/app/admin/layout.tsx
-// import Link from "next/link";
-
-// export default function AdminLayout({
-//   children,
-// }: {
-//   children: React.ReactNode;
-// }) {
-//   return (
-//     <div style={{ display: "flex", minHeight: "100vh" }}>
-//       <aside
-//         style={{
-//           width: 200,
-//           padding: 16,
-//           borderRight: "1px solid #ddd",
-//         }}
-//       >
-//         <h3>Admin Panel</h3>
-//         <ul style={{ listStyle: "none", padding: 0 }}>
-//           <li><Link href="/admin">Dashboard</Link></li>
-//           <li><Link href="/admin/journey">Journey</Link></li>
-//           <li><Link href="/admin/work">Work</Link></li>
-//           <li><Link href="/admin/contact">Contact</Link></li>
-//         </ul>
-//       </aside>
-
-//       <main style={{ padding: 24, flex: 1 }}>
-//         {children}
-//       </main>
-//     </div>
-//   );
-// }
-
-
 import Link from "next/link";
-import { Montserrat } from "next/font/google"
 
+import { Montserrat } from "next/font/google"
 
 const montserratFont = Montserrat({
     subsets :["latin"],
@@ -42,15 +8,32 @@ const montserratFont = Montserrat({
 })
 
 
-
-export default function AdminLayout(){
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="p-10">
-        <div className="flex flex-row gap-4">
-            <div className="w-32 h-32 bg-gray-200">1</div>
-            <div className="w-32 h-32 bg-gray-300">2</div>
-        </div>
+ 
+    <div className={`min-h-screen flex flex-col ${montserratFont.className}`}>
+      
+
+      <div className="flex flex-1 border rounded-lg overflow-hidden bg-white">
+        {/* SIDEBAR */}
+        {/* <div className="w-64 p-8 border-r bg-white text-lg flex flex-col gap-y-10">
+            <div className="">
+                <img className="h-12 w-auto" src="/logo/logobenv2.png" alt="" />
+            </div>
+            <div className="flex flex-col gap-2">
+                <Link href="/admin" className="hover:text-blue-500">Dashboard</Link>
+                <Link href="/admin/journey" className="hover:text-blue-500">Journey</Link>
+                <Link href="/admin/work" className="hover:text-blue-500">Work</Link>
+                <Link href="/admin/contact" className="hover:text-blue-500">Contact</Link>
+            </div>
+        </div> */}
+
+        {/* CONTENT */}
+        <main className="flex-1 p-6">
+          {children}
+        </main>
+
+      </div>
     </div>
   );
 }
-
