@@ -9,7 +9,7 @@ interface JourneyForm {
   type: string;
   title: string;
   excerpt: string;
-  cover_image: string;
+  cover_image: File | null;
   year: number;
   order_index: number;
   content?: string;
@@ -23,7 +23,7 @@ export default function CreateJourneyPage() {
     type: "Education",
     title: "",
     excerpt: "",
-    cover_image: "",
+    cover_image: null,
     year: new Date().getFullYear(),
     order_index: 1,
     content: "",
@@ -34,26 +34,43 @@ export default function CreateJourneyPage() {
     setSubmitting(true);
 
     try {
+      const formData = new FormData();
+
+      formData.append("type", form.type);
+      formData.append("title", form.title);
+      formData.append("excerpt", form.excerpt);
+      formData.append("year", String(form.year));
+      formData.append("order_index", String(form.order_index));
+
+      if (form.content) {
+        formData.append("content", form.content);
+      }
+
+      if (form.cover_image) {
+        formData.append("cover_image", form.cover_image);
+      }
+
+      const token = localStorage.getItem("token");
+
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/journeys`,
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(form),
+          body: formData,
         }
       );
 
       if (!res.ok) {
-        alert("Gagal membuat journey");
-        return;
+        throw new Error("Gagal membuat journey");
       }
 
       router.push("/admin/journey");
     } catch (error) {
       console.error(error);
-      alert("Terjadi kesalahan");
+      alert("Terjadi kesalahan saat membuat journey");
     } finally {
       setSubmitting(false);
     }
@@ -61,7 +78,6 @@ export default function CreateJourneyPage() {
 
   return (
     <div className="p-10 max-w-3xl">
-        
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-3xl font-semibold">Create Journey</h1>
@@ -113,7 +129,7 @@ export default function CreateJourneyPage() {
             onChange={(e) =>
               setForm({ ...form, excerpt: e.target.value })
             }
-            className="border p-2 w-full resize-none overflow-y-auto h-20"
+            className="border p-2 w-full resize-none h-20"
             required
           />
         </div>
@@ -121,12 +137,16 @@ export default function CreateJourneyPage() {
         {/* COVER IMAGE */}
         <div>
           <label className="block text-sm font-medium mb-1">
-            Cover Image URL
+            Cover Image
           </label>
           <input
-            value={form.cover_image}
+            type="file"
+            accept="image/*"
             onChange={(e) =>
-              setForm({ ...form, cover_image: e.target.value })
+              setForm({
+                ...form,
+                cover_image: e.target.files?.[0] || null,
+              })
             }
             className="border p-2 w-full"
             required
@@ -181,7 +201,7 @@ export default function CreateJourneyPage() {
             onChange={(e) =>
               setForm({ ...form, content: e.target.value })
             }
-            className="border p-2 w-full resize-none overflow-y-auto h-30"
+            className="border p-2 w-full resize-none h-32"
           />
         </div>
 
@@ -190,13 +210,7 @@ export default function CreateJourneyPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="
-              bg-slate-800
-              text-white
-              px-6
-              py-2
-              disabled:opacity-50
-            "
+            className="bg-slate-800 text-white px-6 py-2 disabled:opacity-50"
           >
             {submitting ? "Creating..." : "Create"}
           </button>

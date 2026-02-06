@@ -55,7 +55,7 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="w-full max-w-sm bg-white border p-6 shadow-sm">
         <h1 className="text-2xl font-semibold text-center mb-6">
-          Login
+          kamu ben ?
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -96,6 +96,11 @@ export default function LoginPage() {
           >
             {loading ? "Logging in..." : "Login"}
           </button>
+          <div className="flex items-center justify-center">
+            <span>kalau kamu bukan ben, </span>
+            <span>Regis </span>
+            <span><p> dulu ya</p></span>
+          </div>
         </form>
       </div>
     </div>
