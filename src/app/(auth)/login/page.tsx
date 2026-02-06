@@ -39,7 +39,7 @@ export default function LoginPage() {
       const data = await res.json();
 
       // SIMPAN TOKEN (sementara pakai localStorage)
-      localStorage.setItem("token", data.token);
+      localStorage.setItem("token", data.data.token);
 
       // Redirect ke admin
       router.push("/admin");
