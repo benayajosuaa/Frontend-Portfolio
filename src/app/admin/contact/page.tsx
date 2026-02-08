@@ -80,15 +80,15 @@ export default function AdminContactPage() {
         </p>
       </div>
 
-      <div className="overflow-x-auto border rounded-md">
+      <div className="overflow-x-auto ">
         <table className="w-full text-sm">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="p-3">Name</th>
-              <th className="p-3">Email</th>
-              <th className="p-3">Subject</th>
+          <thead className="">
+            <tr className="">
+              <th className="p-3 text-left">Name</th>
+              <th className="p-3 text-left">Email</th>
+              <th className="p-3 text-left">Subject</th>
               <th className="p-3">Status</th>
-              <th className="p-3">Date</th>
+              <th className="p-3 text-left">Date</th>
               <th className="p-3 text-center">Action</th>
             </tr>
           </thead>
@@ -133,7 +133,7 @@ export default function AdminContactPage() {
                   </select>
                 </td>
 
-                <td className="p-3">
+                <td className="p-3 ">
                   {new Date(item.created_at).toLocaleDateString()}
                 </td>
 
