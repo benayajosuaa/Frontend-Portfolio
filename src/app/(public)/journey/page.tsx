@@ -72,7 +72,7 @@ export default async function JourneyPage() {
             if (items.length === 0) return null
 
             return(
-              <section key={type} className="mb-30">
+              <section key={type} className="">
                 {/* title sectionnya */}
                   <div className="px-6 md:px-20 mb-8 ">
                     <h2 className="text-xl md:text-3xl">{title}</h2>
