@@ -1,13 +1,13 @@
 import { FaPlus } from "react-icons/fa6";
 import AdminHyperlink from "@/components/AdminHyperlink";
 
-async function getJourneys(){
+async function getworks(){
   const res = await fetch("http://localhost:8080/works", {
     cache: "no-store",
   })
 
   if (!res.ok){
-    throw new Error("Failed fetch journeys")
+    throw new Error("Failed fetch works")
   };
   
   return res.json();
@@ -15,8 +15,8 @@ async function getJourneys(){
 
 
 
-export default async function AdminJourneyPage() {
-  const {data} = await getJourneys()
+export default async function AdminworkPage() {
+  const {data} = await getworks()
   
   return (
    <div className="p-10">
@@ -30,7 +30,7 @@ export default async function AdminJourneyPage() {
           <h1 className="text-3xl font-semibold">Works</h1>
         </div>
         <div className="hover:flex items-center p-2">
-          <a href="/admin/journey/create" className="">
+          <a href="/admin/work/create" className="">
              <button className="
               bg-slate-200
               hover:bg-slate-300
@@ -61,16 +61,16 @@ export default async function AdminJourneyPage() {
             </tr>
           </thead>
           <tbody className="text-base">
-            {data.map((journey: any) => (
-              <tr key={journey.id} className="border-t">
+            {data.map((work: any) => (
+              <tr key={work.id} className="border-t">
                 <td className="truncate p-2">
-                  {journey.title}
+                  {work.title}
                 </td>
-                <td className="text-center p-3">{journey.status}</td>
-                <td className="text-center p-3">{journey.order_index}</td>
+                <td className="text-center p-3">{work.status}</td>
+                <td className="text-center p-3">{work.order_index}</td>
                 <td className="text-center p-3">
                   <a
-                    href={`/admin/journey/edit/${journey.id}`}
+                    href={`/admin/work/edit/${work.id}`}
                     className="text-slate-500 hover:text-blue-700 hover:underline "
                   >
                     Edit Information
