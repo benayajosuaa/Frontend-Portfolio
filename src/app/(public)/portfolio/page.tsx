@@ -77,10 +77,10 @@ export default function HomePage() {
         {/* PORTFOLIO SECTION */}
         <div>
           <div className="flex flex-col md:flex-row">
-            {/* Button & Image */}
-            <div>
+            {/* Button & Image HP*/}
+            <div className="md:hidden">
                 <div className="flex flex-row w-full p-3 justify-between">
-                    <div>
+                    <div className="">
                         <div className="font-medium text-3xl md:text-5xl">
                             {activeWork.title}
                         </div>
