@@ -59,8 +59,8 @@ export default async function JourneyPage() {
         </div>
 
         {/* Title */}
-        <div className="p-15">
-          <div className="relative z-10 pt-24 md:pt-32 pb-10 md:pb-20">
+        <div className="pt-10 p-5 md:p-15">
+          <div className="relative z-10 pt-10 md:pt-32 pb-3 md:pb-20">
             <h1 className="font-medium text-2xl md:text-5xl">discovery</h1>
           </div>
         </div>
@@ -74,11 +74,11 @@ export default async function JourneyPage() {
             return(
               <section key={type} className="">
                 {/* title sectionnya */}
-                  <div className="px-6 md:px-20 mb-8 ">
-                    <h2 className="text-xl md:text-3xl">{title}</h2>
+                  <div className="px-6 md:px-20 mb-8 pt-10 md:pt-20">
+                    <h2 className="text-2xl font-medium md:text-3xl">{title}</h2>
                   </div>
               
-                <div className="bg-amber-500">
+                <div className="">
                   {items
                     .sort((a,b) => a.order_index - b.order_index)
                     .map((item)=> { 
