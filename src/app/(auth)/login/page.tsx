@@ -17,34 +17,44 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email,
-            password,
-          }),
-        }
-      );
+      const url = `${process.env.NEXT_PUBLIC_API_URL}/auth/login`;
+      console.log('Login attempt to:', url);
+      console.log('Credentials:', { email, password: '***' });
+      
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
 
+      console.log('Login response status:', res.status);
+      
       if (!res.ok) {
+        console.error(`Login failed with status ${res.status}`);
         setError("Email atau password salah");
         return;
       }
 
       const data = await res.json();
+      console.log('Login response data:', data);
 
       // SIMPAN TOKEN (sementara pakai localStorage)
-      localStorage.setItem("token", data.data.token);
-
-      // Redirect ke admin
-      router.push("/admin");
+      if (data.data?.token) {
+        localStorage.setItem("token", data.data.token);
+        console.log('Token saved to localStorage');
+        // Redirect ke admin
+        router.push("/admin");
+      } else {
+        console.error('No token in response:', data);
+        setError("Response tidak mengandung token");
+      }
     } catch (err) {
-      console.error(err);
+      console.error('Login error:', err);
       setError("Terjadi kesalahan, coba lagi");
     } finally {
       setLoading(false);

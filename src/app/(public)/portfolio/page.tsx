@@ -31,7 +31,7 @@ export default function HomePage() {
     async function fetchWorks() {
       try {
         const url = `${process.env.NEXT_PUBLIC_API_URL}/works`;
-        console.log('Fetching works from:', url);
+        console.log('🔄 Fetching works from:', url);
         
         const res = await fetch(url, {
           cache: "no-store",
@@ -40,16 +40,22 @@ export default function HomePage() {
           }
         });
         
+        console.log('📊 Works API Response Status:', res.status);
+        
         if (!res.ok) {
-          console.error(`Works API Error: ${res.status}`);
+          console.error(`❌ Works API Error: ${res.status}`);
           setWorks([]);
           return;
         }
         
         const json = await res.json();
-        setWorks(json.data || []);
+        console.log('✅ Works data received:', json);
+        
+        const worksData = json.data || [];
+        console.log(`✅ Loaded ${worksData.length} works`);
+        setWorks(worksData);
       } catch (error) {
-        console.error('fetchWorks error:', error);
+        console.error('❌ fetchWorks error:', error);
         setWorks([]);
       }
     }

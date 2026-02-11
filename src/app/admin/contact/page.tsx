@@ -20,7 +20,7 @@ export default function AdminContactPage() {
     }
 
     const url = `${process.env.NEXT_PUBLIC_API_URL}/contact`;
-    console.log('Admin: Fetching contacts from:', url);
+    console.log('🔄 Admin: Fetching contacts from:', url);
     
     fetch(url, {
       headers: {
@@ -29,15 +29,19 @@ export default function AdminContactPage() {
       },
     })
       .then((res) => {
+        console.log('📊 Admin Contact API Response Status:', res.status);
         if (!res.ok) {
-          console.error(`Contact API Error: ${res.status}`);
+          console.error(`❌ Contact API Error: ${res.status}`);
           throw new Error(`Failed fetch: ${res.status}`);
         }
         return res.json()
       })
-      .then((res) => setData(res.data || []))
+      .then((res) => {
+        console.log('✅ Admin Contact data received:', res);
+        setData(res.data || [])
+      })
       .catch((err) => {
-        console.error('fetch contacts error:', err);
+        console.error('❌ fetch contacts error:', err);
         setError("Failed fetch contact messages");
       })
       .finally(() => setLoading(false))
@@ -58,7 +62,8 @@ export default function AdminContactPage() {
 
     try {
       const url = `${process.env.NEXT_PUBLIC_API_URL}/contact/${id}/status`;
-      console.log('Updating contact status:', url);
+      console.log('🔄 Updating contact status:', url);
+      console.log('📝 New status:', newStatus);
       
       const res = await fetch(url, {
         method: "PUT",
@@ -69,12 +74,16 @@ export default function AdminContactPage() {
         body: JSON.stringify({ status: newStatus }),
       })
 
+      console.log('📊 Status update response:', res.status);
+      
       if (!res.ok) {
-        console.error(`Status update error: ${res.status}`);
+        console.error(`❌ Status update error: ${res.status}`);
         throw new Error(`Failed: ${res.status}`);
       }
+      
+      console.log('✅ Status updated successfully');
     } catch (err) {
-      console.error('updateStatus error:', err);
+      console.error('❌ updateStatus error:', err);
       alert("Failed to update status")
       setData(prevData) // rollback
     }

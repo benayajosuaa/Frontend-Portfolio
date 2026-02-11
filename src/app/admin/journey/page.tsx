@@ -22,7 +22,7 @@ export default function AdminJourneyPage() {
     async function fetchJourneys() {
       try {
         const url = `${process.env.NEXT_PUBLIC_API_URL}/journeys`;
-        console.log('Admin: Fetching journeys from:', url);
+        console.log('🔄 Admin: Fetching journeys from:', url);
         
         const res = await fetch(url, {
           cache: "no-store",
@@ -31,20 +31,24 @@ export default function AdminJourneyPage() {
           }
         });
 
+        console.log('📊 Admin Journey API Response Status:', res.status);
+
         if (!res.ok) {
-          console.error(`Journey API Error: ${res.status}`);
+          console.error(`❌ Journey API Error: ${res.status}`);
           throw new Error(`Failed fetch journeys: ${res.status}`);
         }
 
         const json = await res.json();
+        console.log('✅ Admin Journey data received:', json);
 
         if (!Array.isArray(json.data)) {
           throw new Error("Invalid data format");
         }
 
+        console.log(`✅ Loaded ${json.data.length} journeys for admin`);
         setData(json.data);
       } catch (err) {
-        console.error('fetchJourneys error:', err);
+        console.error('❌ fetchJourneys error:', err);
         setError("Gagal mengambil data journey");
       } finally {
         setLoading(false);

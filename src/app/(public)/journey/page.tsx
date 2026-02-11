@@ -24,7 +24,7 @@ interface Journey {
 async function getJourneys(): Promise<Journey[]> {
   try {
     const url = `${process.env.NEXT_PUBLIC_API_URL}/journeys`;
-    console.log('Fetching from:', url);
+    console.log('🔄 Fetching journeys from:', url);
     
     const res = await fetch(url, {
       cache: "no-store",
@@ -33,15 +33,21 @@ async function getJourneys(): Promise<Journey[]> {
       }
     });
     
+    console.log('📊 Journey API Response Status:', res.status, res.statusText);
+    
     if (!res.ok) {
-      console.error(`API Error: ${res.status} ${res.statusText}`);
+      console.error(`❌ API Error: ${res.status} ${res.statusText}`);
       throw new Error(`Failed to fetch journeys: ${res.status}`);
     }
     
     const data = await res.json();
-    return data.data || [];
+    console.log('✅ Journey data received:', data);
+    
+    const journeys = data.data || [];
+    console.log(`✅ Loaded ${journeys.length} journeys`);
+    return journeys;
   } catch (error) {
-    console.error('getJourneys error:', error);
+    console.error('❌ getJourneys error:', error);
     // Return empty array instead of throwing to allow graceful degradation
     return [];
   }

@@ -37,7 +37,8 @@ export default function HomePage() {
 
     try {
       const url = `${process.env.NEXT_PUBLIC_API_URL}/contact`;
-      console.log('Submitting contact to:', url);
+      console.log('🔄 Submitting contact to:', url);
+      console.log('📝 Form data:', form);
       
       const res = await fetch(url, {
         method: "POST",
@@ -47,11 +48,16 @@ export default function HomePage() {
         body: JSON.stringify(form),
       })
 
+      console.log('📊 Contact API Response Status:', res.status);
+      
       if (!res.ok) {
-        console.error(`Contact API Error: ${res.status}`);
+        console.error(`❌ Contact API Error: ${res.status}`);
         throw new Error(`Failed to send message: ${res.status}`);
       }
 
+      const data = await res.json();
+      console.log('✅ Message sent successfully:', data);
+      
       setSuccess("Message sent successfully ✨")
       setForm({
         name: "",
@@ -61,7 +67,7 @@ export default function HomePage() {
         message: "",
       })
     } catch (error) {
-      console.error('handleSubmit error:', error);
+      console.error('❌ handleSubmit error:', error);
       setError("Failed to send message")
     } finally {
       setLoading(false)
