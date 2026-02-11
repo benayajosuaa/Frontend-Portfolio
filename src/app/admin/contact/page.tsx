@@ -19,7 +19,7 @@ export default function AdminContactPage() {
       return
     }
 
-    fetch("http://localhost:8080/contact", {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/contact`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -48,7 +48,7 @@ export default function AdminContactPage() {
 
     try {
       const res = await fetch(
-        `http://localhost:8080/contact/${id}/status`,
+        `${process.env.NEXT_PUBLIC_API_URL}/contact/${id}/status`,
         {
           method: "PUT",
           headers: {

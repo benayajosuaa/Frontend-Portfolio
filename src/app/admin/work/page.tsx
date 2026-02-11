@@ -2,7 +2,7 @@ import { FaPlus } from "react-icons/fa6";
 import AdminHyperlink from "@/components/AdminHyperlink";
 
 async function getworks(){
-  const res = await fetch("http://localhost:8080/works", {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/works`, {
     cache: "no-store",
   })
 

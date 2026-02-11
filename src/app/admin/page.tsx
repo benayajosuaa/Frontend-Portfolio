@@ -3,7 +3,7 @@ import AdminHyperlink from "@/components/AdminHyperlink";
 
 
 async function getJourneys(){
-  const res = await fetch("http://localhost:8080/journeys", {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/journeys`, {
     cache: "no-store",
   })
 
