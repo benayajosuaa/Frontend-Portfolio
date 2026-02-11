@@ -1,19 +1,23 @@
 /**
  * API Service untuk komunikasi dengan backend
  * Base URL: https://backend-portfolio-ben.vercel.app/
+ * 
+ * Support 2 endpoint formats:
+ * - /journeys (preferred)
+ * - /api/journeys (fallback)
  */
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://backend-portfolio-ben.vercel.app';
 
 /**
- * Fungsi helper untuk membuat API request
+ * Fungsi helper untuk membuat API request dengan fallback endpoints
  */
 async function apiCall<T>(
   endpoint: string,
   options?: RequestInit
 ): Promise<T> {
-  const url = `${API_BASE_URL}${endpoint}`;
-
+  let url = `${API_BASE_URL}${endpoint}`;
+  
   try {
     const response = await fetch(url, {
       headers: {
@@ -23,7 +27,32 @@ async function apiCall<T>(
       ...options,
     });
 
+    // Jika 404, coba dengan /api prefix
+    if (response.status === 404) {
+      console.log(`⚠️ Endpoint ${endpoint} returned 404, trying /api${endpoint}...`);
+      url = `${API_BASE_URL}/api${endpoint}`;
+      
+      const retryResponse = await fetch(url, {
+        headers: {
+          'Content-Type': 'application/json',
+          ...options?.headers,
+        },
+        ...options,
+      });
+
+      if (!retryResponse.ok) {
+        const errorText = await retryResponse.text();
+        console.error(`API Error on /api${endpoint}: ${retryResponse.status}`, errorText);
+        throw new Error(`API Error: ${retryResponse.status} ${retryResponse.statusText}`);
+      }
+
+      const data = await retryResponse.json();
+      return data as T;
+    }
+
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`API Error on ${endpoint}: ${response.status}`, errorText);
       throw new Error(`API Error: ${response.status} ${response.statusText}`);
     }
 

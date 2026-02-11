@@ -30,10 +30,10 @@ export default function HomePage() {
   useEffect(() => {
     async function fetchWorks() {
       try {
-        const url = `${process.env.NEXT_PUBLIC_API_URL}/works`;
+        let url = `${process.env.NEXT_PUBLIC_API_URL}/works`;
         console.log('🔄 Fetching works from:', url);
         
-        const res = await fetch(url, {
+        let res = await fetch(url, {
           cache: "no-store",
           headers: {
             'Accept': 'application/json',
@@ -41,6 +41,19 @@ export default function HomePage() {
         });
         
         console.log('📊 Works API Response Status:', res.status);
+        
+        // Jika 404, coba /api/works
+        if (res.status === 404) {
+          console.log('⚠️ Endpoint /works returned 404, trying /api/works...');
+          url = `${process.env.NEXT_PUBLIC_API_URL}/api/works`;
+          res = await fetch(url, {
+            cache: "no-store",
+            headers: {
+              'Accept': 'application/json',
+            }
+          });
+          console.log('📊 Works API (with /api) Response Status:', res.status);
+        }
         
         if (!res.ok) {
           console.error(`❌ Works API Error: ${res.status}`);
@@ -51,7 +64,8 @@ export default function HomePage() {
         const json = await res.json();
         console.log('✅ Works data received:', json);
         
-        const worksData = json.data || [];
+        // Handle both { data: [...] } dan [...] format
+        const worksData = Array.isArray(json) ? json : (json.data || []);
         console.log(`✅ Loaded ${worksData.length} works`);
         setWorks(worksData);
       } catch (error) {

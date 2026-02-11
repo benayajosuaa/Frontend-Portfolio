@@ -36,11 +36,11 @@ export default function HomePage() {
     setSuccess("")
 
     try {
-      const url = `${process.env.NEXT_PUBLIC_API_URL}/contact`;
+      let url = `${process.env.NEXT_PUBLIC_API_URL}/contact`;
       console.log('🔄 Submitting contact to:', url);
       console.log('📝 Form data:', form);
       
-      const res = await fetch(url, {
+      let res = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -49,6 +49,20 @@ export default function HomePage() {
       })
 
       console.log('📊 Contact API Response Status:', res.status);
+      
+      // Jika 404, coba /api/contact
+      if (res.status === 404) {
+        console.log('⚠️ Endpoint /contact returned 404, trying /api/contact...');
+        url = `${process.env.NEXT_PUBLIC_API_URL}/api/contact`;
+        res = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(form),
+        })
+        console.log('📊 Contact API (with /api) Response Status:', res.status);
+      }
       
       if (!res.ok) {
         console.error(`❌ Contact API Error: ${res.status}`);

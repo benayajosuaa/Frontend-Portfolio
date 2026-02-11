@@ -21,10 +21,10 @@ export default function AdminJourneyPage() {
   useEffect(() => {
     async function fetchJourneys() {
       try {
-        const url = `${process.env.NEXT_PUBLIC_API_URL}/journeys`;
+        let url = `${process.env.NEXT_PUBLIC_API_URL}/journeys`;
         console.log('🔄 Admin: Fetching journeys from:', url);
         
-        const res = await fetch(url, {
+        let res = await fetch(url, {
           cache: "no-store",
           headers: {
             'Accept': 'application/json',
@@ -32,6 +32,19 @@ export default function AdminJourneyPage() {
         });
 
         console.log('📊 Admin Journey API Response Status:', res.status);
+
+        // Jika 404, coba /api/journeys
+        if (res.status === 404) {
+          console.log('⚠️ Endpoint /journeys returned 404, trying /api/journeys...');
+          url = `${process.env.NEXT_PUBLIC_API_URL}/api/journeys`;
+          res = await fetch(url, {
+            cache: "no-store",
+            headers: {
+              'Accept': 'application/json',
+            }
+          });
+          console.log('📊 Admin Journey API (with /api) Response Status:', res.status);
+        }
 
         if (!res.ok) {
           console.error(`❌ Journey API Error: ${res.status}`);
@@ -41,12 +54,15 @@ export default function AdminJourneyPage() {
         const json = await res.json();
         console.log('✅ Admin Journey data received:', json);
 
-        if (!Array.isArray(json.data)) {
+        // Handle both { data: [...] } dan [...] format
+        const journeyData = Array.isArray(json) ? json : (json.data || []);
+        
+        if (!Array.isArray(journeyData)) {
           throw new Error("Invalid data format");
         }
 
-        console.log(`✅ Loaded ${json.data.length} journeys for admin`);
-        setData(json.data);
+        console.log(`✅ Loaded ${journeyData.length} journeys for admin`);
+        setData(journeyData);
       } catch (err) {
         console.error('❌ fetchJourneys error:', err);
         setError("Gagal mengambil data journey");

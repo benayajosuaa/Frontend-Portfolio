@@ -23,10 +23,11 @@ interface Journey {
 
 async function getJourneys(): Promise<Journey[]> {
   try {
-    const url = `${process.env.NEXT_PUBLIC_API_URL}/journeys`;
+    // Try endpoint tanpa /api terlebih dahulu
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/journeys`;
     console.log('🔄 Fetching journeys from:', url);
     
-    const res = await fetch(url, {
+    let res = await fetch(url, {
       cache: "no-store",
       headers: {
         'Accept': 'application/json',
@@ -35,20 +36,43 @@ async function getJourneys(): Promise<Journey[]> {
     
     console.log('📊 Journey API Response Status:', res.status, res.statusText);
     
+    // Jika 404, coba /api/journeys
+    if (res.status === 404) {
+      console.log('⚠️ Endpoint /journeys returned 404, trying /api/journeys...');
+      url = `${process.env.NEXT_PUBLIC_API_URL}/api/journeys`;
+      res = await fetch(url, {
+        cache: "no-store",
+        headers: {
+          'Accept': 'application/json',
+        }
+      });
+      console.log('📊 Journey API (with /api) Response Status:', res.status);
+    }
+    
     if (!res.ok) {
       console.error(`❌ API Error: ${res.status} ${res.statusText}`);
+      
+      // Log response body untuk debugging
+      try {
+        const errorBody = await res.text();
+        console.error('API Error Response Body:', errorBody);
+      } catch (e) {
+        console.error('Could not read error response');
+      }
+      
       throw new Error(`Failed to fetch journeys: ${res.status}`);
     }
     
     const data = await res.json();
     console.log('✅ Journey data received:', data);
     
-    const journeys = data.data || [];
+    // Handle both { data: [...] } dan [...] format
+    const journeys = Array.isArray(data) ? data : (data.data || []);
     console.log(`✅ Loaded ${journeys.length} journeys`);
     return journeys;
   } catch (error) {
     console.error('❌ getJourneys error:', error);
-    // Return empty array instead of throwing to allow graceful degradation
+    console.warn('⚠️ Using empty array fallback - API might be down or misconfigured');
     return [];
   }
 }
