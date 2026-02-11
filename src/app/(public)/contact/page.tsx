@@ -36,7 +36,10 @@ export default function HomePage() {
     setSuccess("")
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/contact`, {
+      const url = `${process.env.NEXT_PUBLIC_API_URL}/contact`;
+      console.log('Submitting contact to:', url);
+      
+      const res = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -44,7 +47,10 @@ export default function HomePage() {
         body: JSON.stringify(form),
       })
 
-      if (!res.ok) throw new Error()
+      if (!res.ok) {
+        console.error(`Contact API Error: ${res.status}`);
+        throw new Error(`Failed to send message: ${res.status}`);
+      }
 
       setSuccess("Message sent successfully ✨")
       setForm({
@@ -54,7 +60,8 @@ export default function HomePage() {
         phone: "",
         message: "",
       })
-    } catch {
+    } catch (error) {
+      console.error('handleSubmit error:', error);
       setError("Failed to send message")
     } finally {
       setLoading(false)

@@ -29,12 +29,29 @@ export default function HomePage() {
 
   useEffect(() => {
     async function fetchWorks() {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/works`,
-        { cache: "no-store" }
-      );
-      const json = await res.json();
-      setWorks(json.data || []);
+      try {
+        const url = `${process.env.NEXT_PUBLIC_API_URL}/works`;
+        console.log('Fetching works from:', url);
+        
+        const res = await fetch(url, {
+          cache: "no-store",
+          headers: {
+            'Accept': 'application/json',
+          }
+        });
+        
+        if (!res.ok) {
+          console.error(`Works API Error: ${res.status}`);
+          setWorks([]);
+          return;
+        }
+        
+        const json = await res.json();
+        setWorks(json.data || []);
+      } catch (error) {
+        console.error('fetchWorks error:', error);
+        setWorks([]);
+      }
     }
     fetchWorks();
   }, []);

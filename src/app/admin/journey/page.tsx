@@ -21,13 +21,19 @@ export default function AdminJourneyPage() {
   useEffect(() => {
     async function fetchJourneys() {
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/journeys`,
-          { cache: "no-store" }
-        );
+        const url = `${process.env.NEXT_PUBLIC_API_URL}/journeys`;
+        console.log('Admin: Fetching journeys from:', url);
+        
+        const res = await fetch(url, {
+          cache: "no-store",
+          headers: {
+            'Accept': 'application/json',
+          }
+        });
 
         if (!res.ok) {
-          throw new Error("Failed fetch journeys");
+          console.error(`Journey API Error: ${res.status}`);
+          throw new Error(`Failed fetch journeys: ${res.status}`);
         }
 
         const json = await res.json();
@@ -38,7 +44,7 @@ export default function AdminJourneyPage() {
 
         setData(json.data);
       } catch (err) {
-        console.error(err);
+        console.error('fetchJourneys error:', err);
         setError("Gagal mengambil data journey");
       } finally {
         setLoading(false);

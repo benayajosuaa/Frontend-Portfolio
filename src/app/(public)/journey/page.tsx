@@ -22,13 +22,29 @@ interface Journey {
 }
 
 async function getJourneys(): Promise<Journey[]> {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/journeys`,
-    { cache: "no-store" }
-  );
-  if (!res.ok) throw new Error("Failed to fetch journeys");
-  const data = await res.json();
-  return data.data;
+  try {
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/journeys`;
+    console.log('Fetching from:', url);
+    
+    const res = await fetch(url, {
+      cache: "no-store",
+      headers: {
+        'Accept': 'application/json',
+      }
+    });
+    
+    if (!res.ok) {
+      console.error(`API Error: ${res.status} ${res.statusText}`);
+      throw new Error(`Failed to fetch journeys: ${res.status}`);
+    }
+    
+    const data = await res.json();
+    return data.data || [];
+  } catch (error) {
+    console.error('getJourneys error:', error);
+    // Return empty array instead of throwing to allow graceful degradation
+    return [];
+  }
 }
 
 const SECTION_CONFIG: { type: JourneyType; title: string }[] = [
@@ -41,7 +57,12 @@ const SECTION_CONFIG: { type: JourneyType; title: string }[] = [
 
 
 export default async function JourneyPage() {
-  const journeys = await getJourneys();
+  let journeys: Journey[] = [];
+  try {
+    journeys = await getJourneys();
+  } catch (error) {
+    console.error('JourneyPage error:', error);
+  }
   const grouped = journeys.reduce<Record<JourneyType, Journey[]>>(
     (acc, item) => {
       acc[item.type].push(item);
