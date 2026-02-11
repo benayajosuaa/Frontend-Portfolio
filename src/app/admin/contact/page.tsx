@@ -19,8 +19,8 @@ export default function AdminContactPage() {
       return
     }
 
-    const url = `${process.env.NEXT_PUBLIC_API_URL}/contact`;
-    console.log('🔄 Admin: Fetching contacts from:', url);
+      const url = `/api/contact`;
+      console.log('🔄 Admin: Fetching contacts from:', url);
     
     fetch(url, {
       headers: {

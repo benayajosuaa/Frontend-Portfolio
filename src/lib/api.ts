@@ -7,7 +7,13 @@
  * - /api/journeys (fallback)
  */
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://backend-portfolio-ben.vercel.app';
+const isBrowser = typeof window !== "undefined";
+const API_BASE_URL = isBrowser
+  ? "/api"
+  : process.env.NEXT_PUBLIC_API_URL ||
+    (process.env.NODE_ENV === "development"
+      ? "http://localhost:8080"
+      : "https://backend-portfolio-ben.vercel.app");
 
 /**
  * Fungsi helper untuk membuat API request dengan fallback endpoints

@@ -21,30 +21,16 @@ export default function AdminJourneyPage() {
   useEffect(() => {
     async function fetchJourneys() {
       try {
-        let url = `${process.env.NEXT_PUBLIC_API_URL}/journeys`;
+        const url = `/api/journeys`;
         console.log('🔄 Admin: Fetching journeys from:', url);
         
-        let res = await fetch(url, {
+        const res = await fetch(url, {
           cache: "no-store",
           headers: {
             'Accept': 'application/json',
           }
         });
-
         console.log('📊 Admin Journey API Response Status:', res.status);
-
-        // Jika 404, coba /api/journeys
-        if (res.status === 404) {
-          console.log('⚠️ Endpoint /journeys returned 404, trying /api/journeys...');
-          url = `${process.env.NEXT_PUBLIC_API_URL}/api/journeys`;
-          res = await fetch(url, {
-            cache: "no-store",
-            headers: {
-              'Accept': 'application/json',
-            }
-          });
-          console.log('📊 Admin Journey API (with /api) Response Status:', res.status);
-        }
 
         if (!res.ok) {
           console.error(`❌ Journey API Error: ${res.status}`);

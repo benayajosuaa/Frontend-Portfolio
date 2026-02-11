@@ -34,7 +34,7 @@ export default function EditJourneyPage() {
     async function fetchJourney() {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/journeys/${id}`,
+          `/api/journeys/${id}`,
           { cache: "no-store" }
         );
 
@@ -81,15 +81,15 @@ export default function EditJourneyPage() {
       }
 
      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/journeys/${id}`,
-        {
-            method: "PUT",
-            headers: {
-                Authorization: `Bearer ${token}`,
-                // JANGAN tambahkan Content-Type di sini jika menggunakan FormData
-            },
-            body: fd,
-        }
+      `/api/journeys/${id}`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          // JANGAN tambahkan Content-Type di sini jika menggunakan FormData
+        },
+        body: fd,
+      }
     );
       if (!res.ok) {
         const err = await res.json();

@@ -36,7 +36,7 @@ export default function EditWorkPage() {
     async function fetchWork() {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/works/${id}`,
+          `/api/works/${id}`,
           { cache: "no-store" }
         );
 
@@ -86,7 +86,7 @@ export default function EditWorkPage() {
       }
 
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/works/${id}`,
+        `/api/works/${id}`,
         {
           method: "PUT",
           headers: {

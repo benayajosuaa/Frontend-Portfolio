@@ -2,14 +2,18 @@ import { FaPlus } from "react-icons/fa6";
 import AdminHyperlink from "@/components/AdminHyperlink";
 
 async function getworks(){
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/works`, {
+  const isServer = typeof window === 'undefined';
+  let url = '/api/works';
+  if (isServer) {
+    const base = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+    url = base + '/api/works';
+  }
+  const res = await fetch(url, {
     cache: "no-store",
-  })
-
+  });
   if (!res.ok){
     throw new Error("Failed fetch works")
   };
-  
   return res.json();
 }
 

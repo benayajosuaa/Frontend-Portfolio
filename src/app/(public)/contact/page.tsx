@@ -5,6 +5,7 @@ import NavigationBar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import { Montserrat } from "next/font/google"
 import { FiArrowRight } from "react-icons/fi"
+import { createContact } from "@/lib/api"
 
 const monserratFont = Montserrat({
   subsets: ["latin"],
@@ -36,42 +37,14 @@ export default function HomePage() {
     setSuccess("")
 
     try {
-      let url = `${process.env.NEXT_PUBLIC_API_URL}/contact`;
-      console.log('🔄 Submitting contact to:', url);
-      console.log('📝 Form data:', form);
-      
-      let res = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
+      await createContact({
+        name: form.name,
+        subject: form.subject,
+        email: form.email,
+        phone: form.phone,
+        message: form.message,
       })
 
-      console.log('📊 Contact API Response Status:', res.status);
-      
-      // Jika 404, coba /api/contact
-      if (res.status === 404) {
-        console.log('⚠️ Endpoint /contact returned 404, trying /api/contact...');
-        url = `${process.env.NEXT_PUBLIC_API_URL}/api/contact`;
-        res = await fetch(url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(form),
-        })
-        console.log('📊 Contact API (with /api) Response Status:', res.status);
-      }
-      
-      if (!res.ok) {
-        console.error(`❌ Contact API Error: ${res.status}`);
-        throw new Error(`Failed to send message: ${res.status}`);
-      }
-
-      const data = await res.json();
-      console.log('✅ Message sent successfully:', data);
-      
       setSuccess("Message sent successfully ✨")
       setForm({
         name: "",

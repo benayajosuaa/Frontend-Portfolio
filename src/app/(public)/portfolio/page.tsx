@@ -6,22 +6,14 @@ import Footer from "@/components/Footer";
 import { Montserrat } from "next/font/google";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import Link from "next/link";
+import { getWorks, type Work as ApiWork } from "@/lib/api";
 
 const monserratFont = Montserrat({
   subsets: ["latin"],
   weight: "300",
 });
 
-interface Work {
-  id: number;
-  title: string;
-  excerpt: string;
-  cover_image: string;
-  github_url?: string;
-  demo_url?: string;
-  drive_url?: string;
-  status: string;
-}
+type Work = ApiWork;
 
 export default function HomePage() {
   const [works, setWorks] = useState<Work[]>([]);
@@ -30,46 +22,10 @@ export default function HomePage() {
   useEffect(() => {
     async function fetchWorks() {
       try {
-        let url = `${process.env.NEXT_PUBLIC_API_URL}/works`;
-        console.log('🔄 Fetching works from:', url);
-        
-        let res = await fetch(url, {
-          cache: "no-store",
-          headers: {
-            'Accept': 'application/json',
-          }
-        });
-        
-        console.log('📊 Works API Response Status:', res.status);
-        
-        // Jika 404, coba /api/works
-        if (res.status === 404) {
-          console.log('⚠️ Endpoint /works returned 404, trying /api/works...');
-          url = `${process.env.NEXT_PUBLIC_API_URL}/api/works`;
-          res = await fetch(url, {
-            cache: "no-store",
-            headers: {
-              'Accept': 'application/json',
-            }
-          });
-          console.log('📊 Works API (with /api) Response Status:', res.status);
-        }
-        
-        if (!res.ok) {
-          console.error(`❌ Works API Error: ${res.status}`);
-          setWorks([]);
-          return;
-        }
-        
-        const json = await res.json();
-        console.log('✅ Works data received:', json);
-        
-        // Handle both { data: [...] } dan [...] format
-        const worksData = Array.isArray(json) ? json : (json.data || []);
-        console.log(`✅ Loaded ${worksData.length} works`);
-        setWorks(worksData);
+        const worksData = await getWorks();
+        setWorks(worksData || []);
       } catch (error) {
-        console.error('❌ fetchWorks error:', error);
+        console.error("❌ fetchWorks error:", error);
         setWorks([]);
       }
     }
@@ -157,11 +113,46 @@ export default function HomePage() {
               border-[#b3b3b3]
               md:rounded-br-2x
             ">
-              <img
-                src={`${process.env.NEXT_PUBLIC_API_URL}${activeWork.cover_image}`}
-                alt={activeWork.title}
-                className="w-full h-full object-cover transition-opacity duration-300"
-              />
+              {(() => {
+                const isAbsoluteUrl = /^https?:\/\//i.test(activeWork.cover_image);
+                const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "";
+
+                if (isAbsoluteUrl) {
+                  return (
+                    <img
+                      src={activeWork.cover_image}
+                      alt={activeWork.title}
+                      className="w-full h-full object-cover transition-opacity duration-300"
+                    />
+                  );
+                }
+
+                if (
+                  activeWork.cover_image.startsWith("/uploads/") ||
+                  activeWork.cover_image.startsWith("/storage/")
+                ) {
+                  const fullImageUrl = `${apiBaseUrl}${activeWork.cover_image}`;
+                  return (
+                    <img
+                      src={fullImageUrl}
+                      alt={activeWork.title}
+                      className="w-full h-full object-cover transition-opacity duration-300"
+                    />
+                  );
+                }
+
+                const localPath = activeWork.cover_image.startsWith("/")
+                  ? activeWork.cover_image
+                  : `/${activeWork.cover_image}`;
+
+                return (
+                  <img
+                    src={localPath}
+                    alt={activeWork.title}
+                    className="w-full h-full object-cover transition-opacity duration-300"
+                  />
+                );
+              })()}
             </div>
 
             {/* CONTENT */}

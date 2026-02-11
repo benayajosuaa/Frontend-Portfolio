@@ -52,7 +52,7 @@ export default function CreateWorkPage() {
       const token = localStorage.getItem("token");
 
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/works`,
+        `/api/works`,
         {
           method: "POST",
           headers: {

@@ -29,7 +29,9 @@ export default function RegisterPage() {
     setError("");
 
     // 🧠 VALIDATION FRONTEND (FIRST GATE)
-    if (!isValidEmail(email)) {
+    const normalizedEmail = email.trim().toLowerCase();
+
+    if (!isValidEmail(normalizedEmail)) {
       setError("Format email tidak valid");
       return;
     }
@@ -53,14 +55,11 @@ export default function RegisterPage() {
     setTimeout(() => setCooldown(false), 3000);
 
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/register`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
-        }
-      );
+      const res = await fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: normalizedEmail, password, register: true }),
+      });
 
       if (!res.ok) {
         const msg = await res.text();

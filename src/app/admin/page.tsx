@@ -1,26 +1,16 @@
-import { FaPlus } from "react-icons/fa6";
+
 import AdminHyperlink from "@/components/AdminHyperlink";
-
-
-async function getJourneys(){
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/journeys`, {
-    cache: "no-store",
-  })
-
-  if (!res.ok){
-    throw new Error("Failed fetch journeys")
-  };
-  
-  return res.json();
-}
-
-
+import { getJourneys } from "@/lib/api";
 
 export default async function AdminJourneyPage() {
-  const {data} = await getJourneys()
-  
+  let data = [];
+  try {
+    data = await getJourneys();
+  } catch (e) {
+    return <div className="p-10 text-red-600">Gagal mengambil data journey</div>;
+  }
   return (
-   <div className="p-10">
+    <div className="p-10">
       {/* Hyperlink */}
       <div>
         <AdminHyperlink/>

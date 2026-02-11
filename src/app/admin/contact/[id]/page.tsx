@@ -25,7 +25,7 @@ export default function AdminContactDetailPage() {
     const fetchDetail = async () => {
       try {
         const res = await fetch(
-          `http://localhost:8080/contact/${id}`,
+          `/api/contact/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -40,7 +40,7 @@ export default function AdminContactDetailPage() {
         // 🔹 auto mark Read (kalau masih Unread)
         if (json.data.status === "Unread") {
           await fetch(
-            `http://localhost:8080/contact/${id}/status`,
+            `/api/contact/${id}/status`,
             {
               method: "PUT",
               headers: {
@@ -73,7 +73,7 @@ export default function AdminContactDetailPage() {
 
     try {
       const res = await fetch(
-        `http://localhost:8080/contact/${id}/reply`,
+        `/api/contact/${id}/reply`,
         {
           method: "POST",
           headers: {
