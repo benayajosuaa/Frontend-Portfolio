@@ -68,8 +68,8 @@ export default function HomePage() {
         </div>
 
         {/* PORTFOLIO SECTION */}
-        <div>
-          <div className="flex flex-col md:flex-row">
+        <div className="">
+          <div className="flex flex-col md:flex-row ">
             {/* Button & Image HP*/}
             <div className="md:hidden">
                 <div className="flex flex-row w-full p-3 justify-between">
@@ -102,16 +102,17 @@ export default function HomePage() {
 
             {/* IMAGE */}
             <div className="
-              w-full
+               w-full
               h-64
               md:w-500
-              md:h-190
+              md:h-[calc(100vh-200px)]
+              md:max-h-[600px]
               overflow-hidden
               bg-black
               border
               border-l-0
               border-[#b3b3b3]
-              md:rounded-br-2x
+              md:rounded-br-2xl
             ">
               {(() => {
                 const isAbsoluteUrl = /^https?:\/\//i.test(activeWork.cover_image);
@@ -252,7 +253,9 @@ export default function HomePage() {
         </div>
       </div>
 
-      <Footer />
+      <div className="pt-10">
+        <Footer />
+      </div>
     </div>
   );
 }
