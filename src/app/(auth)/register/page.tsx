@@ -140,13 +140,13 @@ export default function RegisterPage() {
             </button>
           </form>
 
-          <p className="text-sm text-center mt-4">
+          <p className="text-sm text-center mt-4 text-semibold">
             atau kamu ben? kalau ya tinggal{" "}
             <a
               href="/login"
               className="text-blue-600 hover:underline"
             >
-              Login
+              Login aja
             </a>
           </p>
         </div>

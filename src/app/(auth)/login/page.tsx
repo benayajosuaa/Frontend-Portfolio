@@ -2,6 +2,14 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Montserrat } from "next/font/google";
+
+const monserratFont = Montserrat({
+  subsets: ["latin"],
+  weight: "300",
+});
+
 
 export default function LoginPage() {
   const router = useRouter();
@@ -48,56 +56,60 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="w-full max-w-sm bg-white border p-6 shadow-sm">
-        <h1 className="text-2xl font-semibold text-center mb-6">
-          kamu ben ?
-        </h1>
+    <div className={monserratFont.className}>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="w-full max-w-sm bg-white border p-6 shadow-sm">
+          <h1 className="text-2xl font-semibold text-center mb-6">
+            kamu ben ?
+          </h1>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* EMAIL */}
-          <div>
-            <label className="block text-sm mb-1">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="border p-2 w-full focus:outline-none"
-              required
-            />
-          </div>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* EMAIL */}
+            <div>
+              <label className="block text-sm mb-1">Email</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="border p-2 w-full focus:outline-none"
+                required
+              />
+            </div>
 
-          {/* PASSWORD */}
-          <div>
-            <label className="block text-sm mb-1">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="border p-2 w-full focus:outline-none"
-              required
-            />
-          </div>
+            {/* PASSWORD */}
+            <div>
+              <label className="block text-sm mb-1">Password</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="border p-2 w-full focus:outline-none"
+                required
+              />
+            </div>
 
-          {/* ERROR */}
-          {error && (
-            <p className="text-red-600 text-sm">{error}</p>
-          )}
+            {/* ERROR */}
+            {error && (
+              <p className="text-red-600 text-sm">{error}</p>
+            )}
 
-          {/* BUTTON */}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-slate-800 text-white py-2 disabled:opacity-50"
-          >
-            {loading ? "Logging in..." : "Login"}
-          </button>
-          <div className="flex items-center justify-center">
-            <span>kalau kamu bukan ben, </span>
-            <span>Regis </span>
-            <span><p> dulu ya</p></span>
-          </div>
-        </form>
+            {/* BUTTON */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-slate-800 text-white py-2 disabled:opacity-50"
+            >
+              {loading ? "Logging in..." : "Login"}
+            </button>
+            <div className="flex items-center justify-center">
+              <span>
+                kalau kamu bukan ben 
+                <span> <Link href="/register" className="text-blue-600 hover:underline">Regis </Link> </span>
+                dulu ya
+                </span>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );
