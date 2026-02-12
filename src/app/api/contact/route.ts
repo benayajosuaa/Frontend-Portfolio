@@ -1,4 +1,3 @@
-
 export async function GET(request: Request) {
   const baseUrl =
     process.env.NEXT_PUBLIC_API_URL ||
@@ -29,6 +28,7 @@ export async function GET(request: Request) {
     },
   });
 }
+
 export async function POST(request: Request) {
   const baseUrl =
     process.env.NEXT_PUBLIC_API_URL ||
@@ -36,18 +36,26 @@ export async function POST(request: Request) {
       ? "http://localhost:8080"
       : "https://backend-portfolio-ben.vercel.app");
 
+  // Clone the request body before consuming it
+  const bodyText = await request.text();
+  
+  console.log("[Contact Proxy] POST body:", bodyText);
+  console.log("[Contact Proxy] Forwarding to:", `${baseUrl}/api/contact`);
+
   const response = await fetch(`${baseUrl}/api/contact`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
     },
-    body: await request.text(),
+    body: bodyText,
   });
 
-  const body = await response.text();
+  const responseBody = await response.text();
+  console.log("[Contact Proxy] Response status:", response.status);
+  console.log("[Contact Proxy] Response body:", responseBody);
 
-  return new Response(body, {
+  return new Response(responseBody, {
     status: response.status,
     headers: {
       "Content-Type": response.headers.get("Content-Type") || "application/json",
