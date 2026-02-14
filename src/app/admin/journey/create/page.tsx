@@ -34,6 +34,13 @@ export default function CreateJourneyPage() {
     setSubmitting(true);
 
     try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("Unauthorized: silakan login lagi");
+        router.push("/login");
+        return;
+      }
+
       const formData = new FormData();
 
       formData.append("type", form.type);
@@ -50,8 +57,6 @@ export default function CreateJourneyPage() {
         formData.append("cover_image", form.cover_image);
       }
 
-      const token = localStorage.getItem("token");
-
       const res = await fetch(
         `/api/journeys`,
         {
@@ -64,13 +69,22 @@ export default function CreateJourneyPage() {
       );
 
       if (!res.ok) {
-        throw new Error("Gagal membuat journey");
+        const raw = await res.text();
+        let message = `Gagal membuat journey (${res.status})`;
+        try {
+          const parsed = JSON.parse(raw);
+          message = parsed?.message || parsed?.error || message;
+        } catch {
+          if (raw) message = raw;
+        }
+        throw new Error(message);
       }
 
       router.push("/admin/journey");
     } catch (error) {
       console.error(error);
-      alert("Terjadi kesalahan saat membuat journey");
+      const message = error instanceof Error ? error.message : "Terjadi kesalahan saat membuat journey";
+      alert(message);
     } finally {
       setSubmitting(false);
     }
