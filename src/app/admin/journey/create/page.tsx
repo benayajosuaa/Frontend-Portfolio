@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 
 const JOURNEY_TYPES = ["Education", "Work", "Organization"] as const;
 
+const MAX_UPLOAD_BYTES = 4 * 1024 * 1024; // ~4MB (Vercel request body limit safety)
+
 interface JourneyForm {
   type: string;
   title: string;
@@ -54,6 +56,11 @@ export default function CreateJourneyPage() {
       }
 
       if (form.cover_image) {
+        if (form.cover_image.size > MAX_UPLOAD_BYTES) {
+          throw new Error(
+            `Cover image terlalu besar. Maksimal ${(MAX_UPLOAD_BYTES / (1024 * 1024)).toFixed(0)}MB.`
+          );
+        }
         formData.append("cover_image", form.cover_image);
       }
 
@@ -157,10 +164,18 @@ export default function CreateJourneyPage() {
             type="file"
             accept="image/*"
             onChange={(e) =>
-              setForm({
-                ...form,
-                cover_image: e.target.files?.[0] || null,
-              })
+              (() => {
+                const file = e.target.files?.[0] || null;
+                if (file && file.size > MAX_UPLOAD_BYTES) {
+                  alert(
+                    `File terlalu besar. Maksimal ${(MAX_UPLOAD_BYTES / (1024 * 1024)).toFixed(0)}MB.`
+                  );
+                  e.currentTarget.value = "";
+                  setForm({ ...form, cover_image: null });
+                  return;
+                }
+                setForm({ ...form, cover_image: file });
+              })()
             }
             className="border p-2 w-full"
             required

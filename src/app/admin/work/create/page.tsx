@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 const WORK_TYPES = ["Draft", "Published"] as const;
 type WorkStatus = (typeof WORK_TYPES)[number];
 
+const MAX_UPLOAD_BYTES = 4 * 1024 * 1024; // ~4MB (Vercel request body limit safety)
+
 interface WorkAdminForm {
   title: string;
   status: WorkStatus;
@@ -37,6 +39,13 @@ export default function CreateWorkPage() {
     setSubmitting(true);
 
     try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("Unauthorized: silakan login lagi");
+        router.push("/login");
+        return;
+      }
+
       const formData = new FormData();
 
       formData.append("title", form.title);
@@ -47,9 +56,14 @@ export default function CreateWorkPage() {
       if (form.github_url) formData.append("github_url", form.github_url);
       if (form.demo_url) formData.append("demo_url", form.demo_url);
       if (form.drive_url) formData.append("drive_url", form.drive_url);
-      if (form.cover_image) formData.append("cover_image", form.cover_image);
-
-      const token = localStorage.getItem("token");
+      if (form.cover_image) {
+        if (form.cover_image.size > MAX_UPLOAD_BYTES) {
+          throw new Error(
+            `Cover image terlalu besar. Maksimal ${(MAX_UPLOAD_BYTES / (1024 * 1024)).toFixed(0)}MB.`
+          );
+        }
+        formData.append("cover_image", form.cover_image);
+      }
 
       const res = await fetch(
         `/api/works`,
@@ -62,12 +76,23 @@ export default function CreateWorkPage() {
         }
       );
 
-      if (!res.ok) throw new Error("Gagal membuat work");
+      if (!res.ok) {
+        const raw = await res.text();
+        let message = `Gagal membuat work (${res.status})`;
+        try {
+          const parsed = JSON.parse(raw);
+          message = parsed?.message || parsed?.error || message;
+        } catch {
+          if (raw) message = raw;
+        }
+        throw new Error(message);
+      }
 
       router.push("/admin/work");
     } catch (error) {
       console.error(error);
-      alert("Terjadi kesalahan saat membuat work");
+      const message = error instanceof Error ? error.message : "Terjadi kesalahan saat membuat work";
+      alert(message);
     } finally {
       setSubmitting(false);
     }
@@ -164,10 +189,18 @@ export default function CreateWorkPage() {
               type="file"
               accept="image/*"
               onChange={(e) =>
-                setForm({
-                  ...form,
-                  cover_image: e.target.files?.[0] || null,
-                })
+                (() => {
+                  const file = e.target.files?.[0] || null;
+                  if (file && file.size > MAX_UPLOAD_BYTES) {
+                    alert(
+                      `File terlalu besar. Maksimal ${(MAX_UPLOAD_BYTES / (1024 * 1024)).toFixed(0)}MB.`
+                    );
+                    e.currentTarget.value = "";
+                    setForm({ ...form, cover_image: null });
+                    return;
+                  }
+                  setForm({ ...form, cover_image: file });
+                })()
               }
               className="border p-2 w-full"
               required
