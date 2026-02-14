@@ -1,13 +1,16 @@
 /**
- * API Service untuk komunikasi dengan backend
- * Base URL: https://backend-portfolio-ben.vercel.app/
- * 
- * Support 2 endpoint formats:
- * - /journeys (preferred)
- * - /api/journeys (fallback)
+ * API Service untuk komunikasi dengan backend.
+ *
+ * IMPORTANT:
+ * - Di browser (client components), selalu panggil via proxy Next.js: `/api/...`
+ *   supaya tidak kena CORS saat pakai custom domain.
+ * - Di server (route handlers / server runtime), boleh panggil backend langsung.
  */
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://portfolio-b-alpha-lilac.vercel.app";
+const BACKEND_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || "https://portfolio-b-alpha-lilac.vercel.app";
+
+const API_BASE_URL = typeof window === "undefined" ? BACKEND_BASE_URL : "";
 
 /**
  * Fungsi helper untuk membuat API request dengan fallback endpoints
