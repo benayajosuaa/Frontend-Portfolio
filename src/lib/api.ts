@@ -17,8 +17,10 @@ async function apiCall<T>(
   options?: RequestInit
 ): Promise<T> {
   let url = `${API_BASE_URL}${endpoint}`;
+  console.log(`🔄 API Call: ${url}`);
   try {
     const response = await fetch(url, {
+      cache: "no-store",
       headers: {
         'Content-Type': 'application/json',
         ...options?.headers,
@@ -26,16 +28,19 @@ async function apiCall<T>(
       ...options,
     });
 
+    console.log(`📊 API Response Status: ${response.status} for ${endpoint}`);
+
     if (!response.ok) {
       const errorText = await response.text();
-      console.error(`API Error on ${endpoint}: ${response.status}`, errorText);
+      console.error(`❌ API Error on ${endpoint}: ${response.status}`, errorText);
       throw new Error(`API Error: ${response.status} ${response.statusText}`);
     }
 
     const data = await response.json();
+    console.log(`✅ API Success: ${endpoint}`, data);
     return data as T;
   } catch (error) {
-    console.error(`API Call Failed: ${endpoint}`, error);
+    console.error(`❌ API Call Failed: ${endpoint}`, error);
     throw error;
   }
 }
