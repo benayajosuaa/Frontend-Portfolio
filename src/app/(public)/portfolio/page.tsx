@@ -240,6 +240,8 @@ export default function HomePage() {
                 <div
                   className="
                     pt-6
+                    mb-10
+                    md:mb-0
                     md:absolute
                     md:bottom-10
                     md:left-0
