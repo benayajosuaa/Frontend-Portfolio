@@ -3,7 +3,7 @@ export async function GET() {
     process.env.NEXT_PUBLIC_API_URL ||
     (process.env.NODE_ENV === "development"
       ? "http://localhost:8080"
-      : "https://backend-portfolio-ben.vercel.app");
+      : "https://portfolio-b-alpha-lilac.vercel.app");
 
   const response = await fetch(`${baseUrl}/api/works`, {
     cache: "no-store",
@@ -27,7 +27,7 @@ export async function POST(request: Request) {
     process.env.NEXT_PUBLIC_API_URL ||
     (process.env.NODE_ENV === "development"
       ? "http://localhost:8080"
-      : "https://backend-portfolio-ben.vercel.app");
+      : "https://portfolio-b-alpha-lilac.vercel.app");
 
   // Forward all headers except host
   const headers: Record<string, string> = {};
@@ -37,7 +37,7 @@ export async function POST(request: Request) {
     }
   });
 
-  const response = await fetch(`${baseUrl}/api/works`, {
+  const response = await fetch(`${baseUrl}/works`, {
     method: "POST",
     headers,
     body: request.body,
