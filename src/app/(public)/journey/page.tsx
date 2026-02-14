@@ -126,9 +126,11 @@ export default function JourneyPage() {
                         key={item.id}
                         className="relative w-full h-[420px] md:h-[560px] overflow-hidden group"
                       >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={fullImageUrl}
                           alt={item.title}
+                          loading="lazy"
                           className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
                         />
 
