@@ -1,8 +1,12 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import NavigationBar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import Image from "next/image";
+import NextImage from "next/image";
 import { Montserrat } from "next/font/google";
 import { getJourneys as fetchJourneys } from "@/lib/api";
+import Loader from "@/decoration/Loading";
 
 const monserratFont = Montserrat({
   subsets: ["latin"],
@@ -22,29 +26,80 @@ interface Journey {
   content: string | null;
 }
 
-async function getJourneys(): Promise<Journey[]> {
-  try {
-    const journeys = await fetchJourneys();
-
-    if (!Array.isArray(journeys)) {
-      return [];
-    }
-
-    return journeys;
-  } catch (error) {
-    console.error("❌ getJourneys error:", error);
-    return [];
-  }
-}
-
 const SECTION_CONFIG: { type: JourneyType; title: string }[] = [
   { type: "Education", title: "Education" },
   { type: "Work", title: "Work" },
   { type: "Organization", title: "Experience" },
 ];
 
-export default async function JourneyPage() {
-  const journeys = await getJourneys();
+export default function JourneyPage() {
+  const [journeys, setJourneys] = useState<Journey[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadedImages, setLoadedImages] = useState(0);
+
+  useEffect(() => {
+    async function loadJourneys() {
+      try {
+        const data = await fetchJourneys();
+        setJourneys(Array.isArray(data) ? data : []);
+      } catch (error) {
+        console.error("❌ getJourneys error:", error);
+        setJourneys([]);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    loadJourneys();
+  }, []);
+
+  useEffect(() => {
+    if (journeys.length === 0) {
+      setLoadedImages(0);
+      return;
+    }
+
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    let isCancelled = false;
+    let loaded = 0;
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "";
+
+    function resolveCoverUrl(coverImage: string) {
+      const isAbsoluteUrl = /^https?:\/\//i.test(coverImage);
+
+      if (isAbsoluteUrl) {
+        return coverImage;
+      }
+
+      if (coverImage.startsWith("/uploads/") || coverImage.startsWith("/storage/")) {
+        return `${apiBaseUrl}${coverImage}`;
+      }
+
+      return coverImage.startsWith("/") ? coverImage : `/${coverImage}`;
+    }
+
+    journeys.forEach((journey) => {
+      const image = new window.Image();
+      image.src = resolveCoverUrl(journey.cover_image);
+
+      const handleDone = () => {
+        loaded += 1;
+        if (!isCancelled) {
+          setLoadedImages(loaded);
+        }
+      };
+
+      image.onload = handleDone;
+      image.onerror = handleDone;
+    });
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [journeys]);
 
   const grouped = journeys.reduce<Record<JourneyType, Journey[]>>(
     (acc, item) => {
@@ -57,6 +112,14 @@ export default async function JourneyPage() {
     },
     { Education: [], Work: [], Organization: [] }
   );
+
+  const allImagesLoaded = journeys.length === 0 || loadedImages >= journeys.length;
+
+  if (isLoading || !allImagesLoaded) {
+    return (
+      <Loader />
+    );
+  }
 
   return (
     <div className={monserratFont.className}>
@@ -109,7 +172,7 @@ export default async function JourneyPage() {
                             className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
                           />
                         ) : (
-                          <Image
+                          <NextImage
                             src={fullImageUrl}
                             alt={item.title}
                             fill
