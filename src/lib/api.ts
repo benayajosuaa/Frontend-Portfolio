@@ -19,14 +19,20 @@ async function apiCall<T>(
   let url = `${API_BASE_URL}${endpoint}`;
   console.log(`🔄 API Call: ${url}`);
   try {
-    const response = await fetch(url, {
-      cache: "no-store",
+    const fetchOptions: RequestInit = {
       headers: {
         'Content-Type': 'application/json',
         ...options?.headers,
       },
       ...options,
-    });
+    };
+
+    // Remove cache option for client-side fetch
+    if (typeof window !== 'undefined') {
+      delete (fetchOptions as any).cache;
+    }
+
+    const response = await fetch(url, fetchOptions);
 
     console.log(`📊 API Response Status: ${response.status} for ${endpoint}`);
 
