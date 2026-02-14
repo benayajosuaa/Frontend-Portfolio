@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import NavigationBar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import NextImage from "next/image";
 import { Montserrat } from "next/font/google";
 import { getJourneys as fetchJourneys } from "@/lib/api";
 import Loader from "@/decoration/Loading";
@@ -153,48 +152,22 @@ export default function JourneyPage() {
                     const isAbsoluteUrl =
                       /^https?:\/\//i.test(item.cover_image);
 
-                    let fullImageUrl = item.cover_image;
-                    
-                    if (!isAbsoluteUrl) {
-                      const apiBaseUrl =
-                        process.env.NEXT_PUBLIC_API_URL || "";
-                      fullImageUrl = apiBaseUrl
-                        ? `${apiBaseUrl}${item.cover_image}`
-                        : item.cover_image;
-                    }
+                    const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "";
 
-                    console.log(`🖼️ Journey Image: ${item.title}`, {
-                      cover_image: item.cover_image,
-                      fullImageUrl,
-                      isAbsoluteUrl,
-                    });
+                    const fullImageUrl = isAbsoluteUrl
+                      ? item.cover_image
+                      : `${apiBaseUrl}${item.cover_image}`;
 
                     return (
                       <div
                         key={item.id}
                         className="relative w-full h-[420px] md:h-[560px] overflow-hidden group"
                       >
-                        {process.env.NODE_ENV === "development" ? (
-                          <img
-                            src={fullImageUrl}
-                            alt={item.title}
-                            className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
-                            onError={(e) => {
-                              console.error(`❌ Failed to load image for ${item.title}:`, fullImageUrl);
-                            }}
-                          />
-                        ) : (
-                          <NextImage
-                            src={fullImageUrl}
-                            alt={item.title}
-                            fill
-                            sizes="100vw"
-                            className="object-cover object-center transition-transform duration-700 group-hover:scale-110"
-                            onError={(e) => {
-                              console.error(`❌ Failed to load image for ${item.title}:`, fullImageUrl);
-                            }}
-                          />
-                        )}
+                        <img
+                          src={fullImageUrl}
+                          alt={item.title}
+                          className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
+                        />
 
                         <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/10 to-transparent" />
 
