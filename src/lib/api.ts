@@ -20,7 +20,6 @@ async function apiCall<T>(
   options?: RequestInit
 ): Promise<T> {
   let url = `${API_BASE_URL}${endpoint}`;
-  
   try {
     const response = await fetch(url, {
       headers: {
@@ -29,29 +28,6 @@ async function apiCall<T>(
       },
       ...options,
     });
-
-    // Jika 404, coba dengan /api prefix
-    if (response.status === 404) {
-      console.log(`⚠️ Endpoint ${endpoint} returned 404, trying /api${endpoint}...`);
-      url = `${API_BASE_URL}/api${endpoint}`;
-      
-      const retryResponse = await fetch(url, {
-        headers: {
-          'Content-Type': 'application/json',
-          ...options?.headers,
-        },
-        ...options,
-      });
-
-      if (!retryResponse.ok) {
-        const errorText = await retryResponse.text();
-        console.error(`API Error on /api${endpoint}: ${retryResponse.status}`, errorText);
-        throw new Error(`API Error: ${retryResponse.status} ${retryResponse.statusText}`);
-      }
-
-      const data = await retryResponse.json();
-      return data as T;
-    }
 
     if (!response.ok) {
       const errorText = await response.text();
