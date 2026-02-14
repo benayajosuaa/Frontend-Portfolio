@@ -319,7 +319,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      <div className="pt-10">
+      <div className="pt-20 md:pt-10">
         <Footer />
       </div>
     </div>
