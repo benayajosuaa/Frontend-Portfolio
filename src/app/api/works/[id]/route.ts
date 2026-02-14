@@ -7,7 +7,7 @@ export async function GET(
     process.env.NEXT_PUBLIC_API_URL ||
     (process.env.NODE_ENV === "development"
       ? "http://localhost:8080"
-      : "https://backend-portfolio-ben.vercel.app");
+      : "https://portfolio-b-alpha-lilac.vercel.app");
 
   const response = await fetch(`${baseUrl}/api/works/${id}`, {
     method: "GET",
@@ -36,7 +36,7 @@ export async function PUT(
     process.env.NEXT_PUBLIC_API_URL ||
     (process.env.NODE_ENV === "development"
       ? "http://localhost:8080"
-      : "https://backend-portfolio-ben.vercel.app");
+      : "https://portfolio-b-alpha-lilac.vercel.app");
 
   // Forward all headers except host
   const headers: Record<string, string> = {};
@@ -73,7 +73,7 @@ export async function DELETE(
     process.env.NEXT_PUBLIC_API_URL ||
     (process.env.NODE_ENV === "development"
       ? "http://localhost:8080"
-      : "https://backend-portfolio-ben.vercel.app");
+      : "https://portfolio-b-alpha-lilac.vercel.app");
 
   const headers: Record<string, string> = {};
   const auth = request.headers.get("authorization");

@@ -3,7 +3,7 @@ export async function GET(request: Request) {
     process.env.NEXT_PUBLIC_API_URL ||
     (process.env.NODE_ENV === "development"
       ? "http://localhost:8080"
-      : "");
+      : "https://portfolio-b-alpha-lilac.vercel.app");
 
   // Forward Authorization header if present (for admin fetch)
   const headers: Record<string, string> = {
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
     process.env.NEXT_PUBLIC_API_URL ||
     (process.env.NODE_ENV === "development"
       ? "http://localhost:8080"
-      : "https://backend-portfolio-ben.vercel.app");
+      : "https://portfolio-b-alpha-lilac.vercel.app");
 
   // Forward all headers except host
   const headers: Record<string, string> = {};

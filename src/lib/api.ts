@@ -7,7 +7,7 @@
  * - /api/journeys (fallback)
  */
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://serverless-backend-porto-vercel.vercel.app";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://portfolio-b-alpha-lilac.vercel.app";
 
 /**
  * Fungsi helper untuk membuat API request dengan fallback endpoints
