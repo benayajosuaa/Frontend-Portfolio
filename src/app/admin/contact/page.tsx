@@ -61,7 +61,7 @@ export default function AdminContactPage() {
     )
 
     try {
-      const url = `${process.env.NEXT_PUBLIC_API_URL}/contact/${id}/status`;
+      const url = `/api/contact/${id}/status`;
       console.log('🔄 Updating contact status:', url);
       console.log('📝 New status:', newStatus);
       
