@@ -10,10 +10,8 @@
 const isBrowser = typeof window !== "undefined";
 const API_BASE_URL = isBrowser
   ? "/api"
-  : process.env.NEXT_PUBLIC_API_URL ||
-    (process.env.NODE_ENV === "development"
-      ? "http://localhost:8080"
-      : "https://backend-portfolio-ben.vercel.app");
+  : (process.env.NEXT_PUBLIC_API_URL || 
+     (process.env.NODE_ENV === "development" && "http://localhost:8080"))
 
 /**
  * Fungsi helper untuk membuat API request dengan fallback endpoints
