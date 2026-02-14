@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import NavigationBar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Montserrat } from "next/font/google";
-import { getJourneys as fetchJourneys } from "@/lib/api";
 import Loader from "@/decoration/Loading";
 
 const monserratFont = Montserrat({
@@ -34,90 +33,54 @@ const SECTION_CONFIG: { type: JourneyType; title: string }[] = [
 export default function JourneyPage() {
   const [journeys, setJourneys] = useState<Journey[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [loadedImages, setLoadedImages] = useState(0);
 
   useEffect(() => {
-    async function loadJourneys() {
+    async function fetchJourneys() {
       try {
-        const data = await fetchJourneys();
-        setJourneys(Array.isArray(data) ? data : []);
+        console.log("🔄 Fetching journeys...");
+        
+        // Direct fetch to local API route (same pattern as admin)
+        const res = await fetch("/api/journeys", {
+          headers: {
+            "Accept": "application/json",
+          },
+        });
+
+        console.log("📊 Response status:", res.status);
+
+        if (!res.ok) {
+          throw new Error(`Failed to fetch: ${res.status}`);
+        }
+
+        const json = await res.json();
+        console.log("✅ Journeys data:", json);
+
+        // Handle both { data: [...] } and [...] format
+        const journeyData = Array.isArray(json) ? json : (json.data || []);
+        setJourneys(journeyData);
       } catch (error) {
-        console.error("❌ getJourneys error:", error);
+        console.error("❌ fetchJourneys error:", error);
         setJourneys([]);
       } finally {
         setIsLoading(false);
       }
     }
 
-    loadJourneys();
+    fetchJourneys();
   }, []);
-
-  useEffect(() => {
-    if (journeys.length === 0) {
-      setLoadedImages(0);
-      return;
-    }
-
-    if (typeof window === "undefined") {
-      return;
-    }
-
-    let isCancelled = false;
-    let loaded = 0;
-    const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "";
-
-    function resolveCoverUrl(coverImage: string) {
-      const isAbsoluteUrl = /^https?:\/\//i.test(coverImage);
-
-      if (isAbsoluteUrl) {
-        return coverImage;
-      }
-
-      if (coverImage.startsWith("/uploads/") || coverImage.startsWith("/storage/")) {
-        return `${apiBaseUrl}${coverImage}`;
-      }
-
-      return coverImage.startsWith("/") ? coverImage : `/${coverImage}`;
-    }
-
-    journeys.forEach((journey) => {
-      const image = new window.Image();
-      image.src = resolveCoverUrl(journey.cover_image);
-
-      const handleDone = () => {
-        loaded += 1;
-        if (!isCancelled) {
-          setLoadedImages(loaded);
-        }
-      };
-
-      image.onload = handleDone;
-      image.onerror = handleDone;
-    });
-
-    return () => {
-      isCancelled = true;
-    };
-  }, [journeys]);
 
   const grouped = journeys.reduce<Record<JourneyType, Journey[]>>(
     (acc, item) => {
       if (acc[item.type]) {
         acc[item.type].push(item);
-      } else {
-        console.warn("⚠️ Unknown type:", item.type);
       }
       return acc;
     },
     { Education: [], Work: [], Organization: [] }
   );
 
-  const allImagesLoaded = journeys.length === 0 || loadedImages >= journeys.length;
-
-  if (isLoading || !allImagesLoaded) {
-    return (
-      <Loader />
-    );
+  if (isLoading) {
+    return <Loader />;
   }
 
   return (
