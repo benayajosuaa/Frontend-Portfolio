@@ -153,12 +153,21 @@ export default function JourneyPage() {
                     const isAbsoluteUrl =
                       /^https?:\/\//i.test(item.cover_image);
 
-                    const apiBaseUrl =
-                      process.env.NEXT_PUBLIC_API_URL ?? "";
+                    let fullImageUrl = item.cover_image;
+                    
+                    if (!isAbsoluteUrl) {
+                      const apiBaseUrl =
+                        process.env.NEXT_PUBLIC_API_URL || "";
+                      fullImageUrl = apiBaseUrl
+                        ? `${apiBaseUrl}${item.cover_image}`
+                        : item.cover_image;
+                    }
 
-                    const fullImageUrl = isAbsoluteUrl
-                      ? item.cover_image
-                      : `${apiBaseUrl}${item.cover_image}`;
+                    console.log(`🖼️ Journey Image: ${item.title}`, {
+                      cover_image: item.cover_image,
+                      fullImageUrl,
+                      isAbsoluteUrl,
+                    });
 
                     return (
                       <div
@@ -170,6 +179,9 @@ export default function JourneyPage() {
                             src={fullImageUrl}
                             alt={item.title}
                             className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
+                            onError={(e) => {
+                              console.error(`❌ Failed to load image for ${item.title}:`, fullImageUrl);
+                            }}
                           />
                         ) : (
                           <NextImage
@@ -178,6 +190,9 @@ export default function JourneyPage() {
                             fill
                             sizes="100vw"
                             className="object-cover object-center transition-transform duration-700 group-hover:scale-110"
+                            onError={(e) => {
+                              console.error(`❌ Failed to load image for ${item.title}:`, fullImageUrl);
+                            }}
                           />
                         )}
 
