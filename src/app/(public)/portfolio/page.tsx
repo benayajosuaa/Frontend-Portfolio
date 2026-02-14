@@ -215,7 +215,7 @@ export default function HomePage() {
             </div>
 
             {/* CONTENT */}
-            <div className="p-6 md:p-10 md:pb-28 relative w-full">
+            <div className="p-6 md:p-10 relative w-full">
               <div className="flex flex-col">
                 {/* TITLE - desktop*/}
                 <div className="hidden md:flex">
@@ -235,58 +235,81 @@ export default function HomePage() {
                 <div className="pt-6 md:pt-10 text-base md:text-xl">
                   {activeWork.excerpt}
                 </div>
+
+                {/* LINKS (mobile + desktop) */}
+                <div
+                  className="
+                    pt-6
+                    md:absolute
+                    md:bottom-10
+                    md:left-0
+                    md:right-56
+                    md:p-4
+                  "
+                >
+                  <div className="flex flex-col text-sm md:text-lg gap-2">
+                    {activeWork.github_url && (
+                      <div>
+                        <span className="font-semibold">Github: </span>
+                        <Link
+                          href={activeWork.github_url}
+                          target="_blank"
+                          className="underline break-all"
+                        >
+                          {activeWork.github_url}
+                        </Link>
+                      </div>
+                    )}
+
+                    {activeWork.drive_url && (
+                      <div>
+                        <span className="font-semibold">Drive: </span>
+                        <Link
+                          href={activeWork.drive_url}
+                          target="_blank"
+                          className="underline break-all"
+                        >
+                          {activeWork.drive_url}
+                        </Link>
+                      </div>
+                    )}
+
+                    {activeWork.demo_url && (
+                      <div>
+                        <span className="font-semibold">Demo: </span>
+                        <Link
+                          href={activeWork.demo_url}
+                          target="_blank"
+                          className="underline break-all"
+                        >
+                          {activeWork.demo_url}
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
 
-              {/* Bottom bar (desktop): links + buttons */}
-              <div className="pt-6 md:absolute md:bottom-10 md:left-10 md:right-10 md:pt-0 hidden md:flex md:items-end md:justify-between gap-6">
-                <div className="flex flex-col text-sm md:text-lg gap-2 min-w-0">
-                  {activeWork.github_url && (
-                    <div className="min-w-0">
-                      <span className="font-semibold">Github: </span>
-                      <Link
-                        href={activeWork.github_url}
-                        target="_blank"
-                        className="underline break-all"
-                      >
-                        {activeWork.github_url}
-                      </Link>
-                    </div>
-                  )}
-
-                  {activeWork.drive_url && (
-                    <div className="min-w-0">
-                      <span className="font-semibold">Drive: </span>
-                      <Link
-                        href={activeWork.drive_url}
-                        target="_blank"
-                        className="underline break-all"
-                      >
-                        {activeWork.drive_url}
-                      </Link>
-                    </div>
-                  )}
-
-                  {activeWork.demo_url && (
-                    <div className="min-w-0">
-                      <span className="font-semibold">Demo: </span>
-                      <Link
-                        href={activeWork.demo_url}
-                        target="_blank"
-                        className="underline break-all"
-                      >
-                        {activeWork.demo_url}
-                      </Link>
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex flex-row text-5xl md:text-7xl font-thin text-gray-500 gap-6 shrink-0">
-                  <button onClick={handlePrev} className="hover:opacity-60">
-                    <IoIosArrowBack />
-                  </button>
-                  <button onClick={handleNext} className="hover:opacity-60">
-                    <IoIosArrowForward />
-                  </button>
+              {/* BUTTONS - Desktop (ke kanan bawah, tidak overlap links) */}
+              <div className="hidden md:flex">
+                <div
+                  className="
+                    flex
+                    justify-center
+                    pt-8
+                    md:absolute
+                    md:bottom-10
+                    md:right-10
+                  "
+                >
+                  <div className="flex flex-row text-5xl md:text-7xl font-thin text-gray-500 gap-6">
+                    <button onClick={handlePrev} className="hover:opacity-60">
+                      <IoIosArrowBack />
+                    </button>
+                    <button onClick={handleNext} className="hover:opacity-60">
+                      <IoIosArrowForward />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
