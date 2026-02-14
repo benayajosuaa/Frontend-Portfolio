@@ -53,29 +53,29 @@ export interface Journey {
 }
 
 export async function getJourneys(): Promise<Journey[]> {
-  return apiCall<{ data: Journey[] }>('/journeys').then(res => res.data);
+  return apiCall<{ data: Journey[] }>('/api/journeys').then(res => res.data);
 }
 
 export async function getJourneyById(id: number): Promise<Journey> {
-  return apiCall<Journey>(`/journeys/${id}`);
+  return apiCall<Journey>(`/api/journeys/${id}`);
 }
 
 export async function createJourney(data: Omit<Journey, 'id'>): Promise<Journey> {
-  return apiCall<Journey>('/journeys', {
+  return apiCall<Journey>('/api/journeys', {
     method: 'POST',
     body: JSON.stringify(data),
   });
 }
 
 export async function updateJourney(id: number, data: Partial<Journey>): Promise<Journey> {
-  return apiCall<Journey>(`/journeys/${id}`, {
+  return apiCall<Journey>(`/api/journeys/${id}`, {
     method: 'PUT',
     body: JSON.stringify(data),
   });
 }
 
 export async function deleteJourney(id: number): Promise<void> {
-  return apiCall<void>(`/journeys/${id}`, {
+  return apiCall<void>(`/api/journeys/${id}`, {
     method: 'DELETE',
   });
 }
@@ -93,29 +93,29 @@ export interface Work {
 }
 
 export async function getWorks(): Promise<Work[]> {
-  return apiCall<{ data: Work[] }>('/works').then(res => res.data);
+  return apiCall<{ data: Work[] }>('/api/works').then(res => res.data);
 }
 
 export async function getWorkById(id: number): Promise<Work> {
-  return apiCall<Work>(`/works/${id}`);
+  return apiCall<Work>(`/api/works/${id}`);
 }
 
 export async function createWork(data: Omit<Work, 'id'>): Promise<Work> {
-  return apiCall<Work>('/works', {
+  return apiCall<Work>('/api/works', {
     method: 'POST',
     body: JSON.stringify(data),
   });
 }
 
 export async function updateWork(id: number, data: Partial<Work>): Promise<Work> {
-  return apiCall<Work>(`/works/${id}`, {
+  return apiCall<Work>(`/api/works/${id}`, {
     method: 'PUT',
     body: JSON.stringify(data),
   });
 }
 
 export async function deleteWork(id: number): Promise<void> {
-  return apiCall<void>(`/works/${id}`, {
+  return apiCall<void>(`/api/works/${id}`, {
     method: 'DELETE',
   });
 }
@@ -133,7 +133,7 @@ export interface Contact {
 }
 
 export async function getContacts(token: string): Promise<Contact[]> {
-  return apiCall<{ data: Contact[] }>('/contact', {
+  return apiCall<{ data: Contact[] }>('/api/contact', {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -141,7 +141,7 @@ export async function getContacts(token: string): Promise<Contact[]> {
 }
 
 export async function getContactById(id: number, token: string): Promise<Contact> {
-  return apiCall<Contact>(`/contact/${id}`, {
+  return apiCall<Contact>(`/api/contact/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -149,14 +149,14 @@ export async function getContactById(id: number, token: string): Promise<Contact
 }
 
 export async function createContact(data: Omit<Contact, 'id' | 'created_at' | 'status'>): Promise<Contact> {
-  return apiCall<Contact>('/contact', {
+  return apiCall<Contact>('/api/contact', {
     method: 'POST',
     body: JSON.stringify(data),
   });
 }
 
 export async function updateContactStatus(id: number, status: string, token: string): Promise<Contact> {
-  return apiCall<Contact>(`/contact/${id}/status`, {
+  return apiCall<Contact>(`/api/contact/${id}/status`, {
     method: 'PUT',
     headers: {
       Authorization: `Bearer ${token}`,
@@ -166,7 +166,7 @@ export async function updateContactStatus(id: number, status: string, token: str
 }
 
 export async function deleteContact(id: number, token: string): Promise<void> {
-  return apiCall<void>(`/contact/${id}`, {
+  return apiCall<void>(`/api/contact/${id}`, {
     method: 'DELETE',
     headers: {
       Authorization: `Bearer ${token}`,

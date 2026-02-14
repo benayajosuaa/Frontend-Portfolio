@@ -37,7 +37,7 @@ export async function POST(request: Request) {
     }
   });
 
-  const response = await fetch(`${baseUrl}/works`, {
+  const response = await fetch(`${baseUrl}/api/works`, {
     method: "POST",
     headers,
     body: request.body,
