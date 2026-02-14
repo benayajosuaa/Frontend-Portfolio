@@ -1,5 +1,8 @@
-export async function POST(request: Request, { params }: { params: { id: string } }) {
-  const id = params?.id || new URL(request.url).pathname.split("/").slice(-2, -1)[0] || "";
+export async function POST(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
   const baseUrl =
     process.env.NEXT_PUBLIC_API_URL ||
     (process.env.NODE_ENV === "development"

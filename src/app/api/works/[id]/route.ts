@@ -1,10 +1,8 @@
-export async function GET(request: Request, context: any) {
-  let id = "";
-  if (context?.params) {
-    const params = typeof context.params.then === "function" ? await context.params : context.params;
-    id = params.id;
-  }
-  id = id || new URL(request.url).pathname.split("/").pop() || "";
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
   const baseUrl =
     process.env.NEXT_PUBLIC_API_URL ||
     (process.env.NODE_ENV === "development"
@@ -29,13 +27,11 @@ export async function GET(request: Request, context: any) {
   });
 }
 
-export async function PUT(request: Request, context: any) {
-  let id = "";
-  if (context?.params) {
-    const params = typeof context.params.then === "function" ? await context.params : context.params;
-    id = params.id;
-  }
-  id = id || new URL(request.url).pathname.split("/").pop() || "";
+export async function PUT(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
   const baseUrl =
     process.env.NEXT_PUBLIC_API_URL ||
     (process.env.NODE_ENV === "development"
@@ -68,13 +64,11 @@ export async function PUT(request: Request, context: any) {
   });
 }
 
-export async function DELETE(request: Request, context: any) {
-  let id = "";
-  if (context?.params) {
-    const params = typeof context.params.then === "function" ? await context.params : context.params;
-    id = params.id;
-  }
-  id = id || new URL(request.url).pathname.split("/").pop() || "";
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
   const baseUrl =
     process.env.NEXT_PUBLIC_API_URL ||
     (process.env.NODE_ENV === "development"

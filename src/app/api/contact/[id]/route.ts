@@ -1,5 +1,8 @@
-export async function GET(request: Request, { params }: { params: { id: string } }) {
-  const id = params?.id || new URL(request.url).pathname.split("/").pop() || "";
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
   const baseUrl =
     process.env.NEXT_PUBLIC_API_URL ||
     (process.env.NODE_ENV === "development"
@@ -28,8 +31,11 @@ export async function GET(request: Request, { params }: { params: { id: string }
   });
 }
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
-  const id = params?.id || new URL(request.url).pathname.split("/").pop() || "";
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
   const baseUrl =
     process.env.NEXT_PUBLIC_API_URL ||
     (process.env.NODE_ENV === "development"
