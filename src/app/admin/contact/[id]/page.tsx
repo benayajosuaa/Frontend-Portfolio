@@ -106,11 +106,11 @@ export default function AdminContactDetailPage() {
       <h1 className="text-2xl font-semibold">Contact Detail</h1>
 
       {/* META INFO */}
-      <div className="text-sm space-y-1">
-        <p><b>Name:</b> {data.name}</p>
-        <p><b>Email:</b> {data.email}</p>
-        <p><b>Subject:</b> {data.subject}</p>
-        <p><b>Status:</b> {data.status}</p>
+      <div className="text-base space-y-1">
+        <p><b>Name : </b> {data.name}</p>
+        <p><b>Email : </b> {data.email}</p>
+        <p><b>Subject : </b> {data.subject}</p>
+        <p><b>Status : </b> {data.status}</p>
         <p>
           <b>Date:</b>{" "}
           {new Date(data.created_at).toLocaleString()}
@@ -119,7 +119,12 @@ export default function AdminContactDetailPage() {
 
       {/* MESSAGE */}
       <div className="text-xl">
-        <span className="font-medium ">subject: </span><span className="font-normal">{data.subject}</span>
+        <span className="font-semibold ">subject: </span><span className="font-normal">{data.subject}</span>
+      </div>
+      
+      <div className="flex flex-col gap-y-2">
+        <span className="text-base font-semibold">Message: </span>
+        <span>{data.message}</span>
       </div>
 
       {/* REPLY */}
