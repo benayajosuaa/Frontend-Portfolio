@@ -5,29 +5,41 @@ export async function GET(request: Request) {
       ? "http://localhost:8080"
       : "https://portfolio-b-alpha-lilac.vercel.app");
 
-  // Forward Authorization header if present (for admin fetch)
-  const headers: Record<string, string> = {
-    Accept: "application/json",
-  };
-  if (request && typeof request.headers?.get === 'function') {
-    const auth = request.headers.get('authorization');
-    if (auth) headers['Authorization'] = auth;
+  try {
+    // Forward Authorization header if present (for admin fetch)
+    const headers: Record<string, string> = {
+      Accept: "application/json",
+    };
+    if (request && typeof request.headers?.get === 'function') {
+      const auth = request.headers.get('authorization');
+      if (auth) headers['Authorization'] = auth;
+    }
+
+    console.log("[Journeys Proxy] GET request to:", `${baseUrl}/api/journeys`);
+
+    const response = await fetch(`${baseUrl}/api/journeys`, {
+      method: "GET",
+      headers,
+    });
+
+    const body = await response.text();
+    console.log("[Journeys Proxy] GET response status:", response.status);
+
+    return new Response(body, {
+      status: response.status,
+      headers: {
+        "Content-Type": response.headers.get("Content-Type") || "application/json",
+      },
+    });
+  } catch (error) {
+    console.error("[Journeys Proxy] GET error:", error);
+    return new Response(JSON.stringify({ error: "Failed to fetch journeys" }), {
+      status: 500,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   }
-
-  const response = await fetch(`${baseUrl}/api/journeys`, {
-    method: "GET",
-    headers,
-    cache: "no-store",
-  });
-
-  const body = await response.text();
-
-  return new Response(body, {
-    status: response.status,
-    headers: {
-      "Content-Type": response.headers.get("Content-Type") || "application/json",
-    },
-  });
 }
 
 export async function POST(request: Request) {
@@ -37,28 +49,41 @@ export async function POST(request: Request) {
       ? "http://localhost:8080"
       : "https://portfolio-b-alpha-lilac.vercel.app");
 
-  // Forward all headers except host
-  const headers: Record<string, string> = {};
-  request.headers.forEach((value, key) => {
-    if (key.toLowerCase() !== "host") {
-      headers[key] = value;
-    }
-  });
+  try {
+    // Forward all headers except host
+    const headers: Record<string, string> = {};
+    request.headers.forEach((value, key) => {
+      if (key.toLowerCase() !== "host") {
+        headers[key] = value;
+      }
+    });
 
-  const response = await fetch(`${baseUrl}/api/journeys`, {
-    method: "POST",
-    headers,
-    body: request.body,
-    // @ts-ignore - duplex is required for streaming body
-    duplex: "half",
-  });
+    console.log("[Journeys Proxy] POST request to:", `${baseUrl}/api/journeys`);
 
-  const body = await response.text();
+    const response = await fetch(`${baseUrl}/api/journeys`, {
+      method: "POST",
+      headers,
+      body: request.body,
+      // @ts-ignore - duplex is required for streaming body
+      duplex: "half",
+    });
 
-  return new Response(body, {
-    status: response.status,
-    headers: {
-      "Content-Type": response.headers.get("Content-Type") || "application/json",
-    },
-  });
+    const body = await response.text();
+    console.log("[Journeys Proxy] POST response status:", response.status);
+
+    return new Response(body, {
+      status: response.status,
+      headers: {
+        "Content-Type": response.headers.get("Content-Type") || "application/json",
+      },
+    });
+  } catch (error) {
+    console.error("[Journeys Proxy] POST error:", error);
+    return new Response(JSON.stringify({ error: "Failed to create journey" }), {
+      status: 500,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  }
 }
