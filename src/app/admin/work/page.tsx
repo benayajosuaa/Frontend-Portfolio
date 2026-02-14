@@ -1,26 +1,39 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import AdminHyperlink from "@/components/AdminHyperlink";
+import { getWorks, type Work } from "@/lib/api";
+import Loader from "@/decoration/Loading";
 
-async function getworks(){
-  const isServer = typeof window === 'undefined';
-  let url = '/api/works';
-  if (isServer) {
-    const base = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-    url = base + '/api/works';
+export default function AdminworkPage() {
+  const [data, setData] = useState<Work[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    async function loadWorks() {
+      try {
+        const works = await getWorks();
+        setData(works || []);
+      } catch (e) {
+        console.error("❌ Failed to fetch works:", e);
+        setError("Gagal mengambil data works");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadWorks();
+  }, []);
+
+  if (loading) {
+    return <Loader />;
   }
-  const res = await fetch(url, {
-    cache: "no-store",
-  });
-  if (!res.ok){
-    throw new Error("Failed fetch works")
-  };
-  return res.json();
-}
 
-
-
-export default async function AdminworkPage() {
-  const {data} = await getworks()
+  if (error) {
+    return <div className="p-10 text-red-600">{error}</div>;
+  }
   
   return (
    <div className="p-10">
