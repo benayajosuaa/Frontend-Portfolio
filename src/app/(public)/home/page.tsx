@@ -28,11 +28,14 @@ export default function LandingPage(){
                         <div className={` flex flex-col gap-y-5 ${montserratFont.className}`}>
                             <div className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light">hai!</div>
                             <div className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light">I'm <span className="font-normal">Benaya Josua</span></div>
-                            <div className="text-2xl md:text-3xl lg:text-3xl xl:text-4xl font-[350] h-10">
+                            <div className="text-2xl md:text-3xl lg:text-3xl xl:text-4xl font-[350] h-10 text-slate-800">
                                 <TextType 
                                 text={
-                                    ["Trying to be a Software Engineer",  
-                                    "Interested in Public Speaking"
+                                    ["Trying to be a good Software Engineer",  
+                                    "Interested in Public Speaking",
+                                    "Curious about Cybersecurity",
+                                    "I love Cat . . .",
+                                    "Like jazz and classic vibes"
                                     ]}
                                 typingSpeed={75}
                                 pauseDuration={1500}
