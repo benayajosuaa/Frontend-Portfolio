@@ -7,10 +7,7 @@
  * - /api/journeys (fallback)
  */
 
-const isBrowser = typeof window !== "undefined";
-const API_BASE_URL = isBrowser
-  ? "/api"
-  : process.env.NEXT_PUBLIC_API_URL || "https://serverless-backend-porto-vercel.vercel.app";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://serverless-backend-porto-vercel.vercel.app";
 
 /**
  * Fungsi helper untuk membuat API request dengan fallback endpoints
@@ -56,29 +53,29 @@ export interface Journey {
 }
 
 export async function getJourneys(): Promise<Journey[]> {
-  return apiCall<{ data: Journey[] }>('/api/journeys').then(res => res.data);
+  return apiCall<{ data: Journey[] }>('/journeys').then(res => res.data);
 }
 
 export async function getJourneyById(id: number): Promise<Journey> {
-  return apiCall<Journey>(`/api/journeys/${id}`);
+  return apiCall<Journey>(`/journeys/${id}`);
 }
 
 export async function createJourney(data: Omit<Journey, 'id'>): Promise<Journey> {
-  return apiCall<Journey>('/api/journeys', {
+  return apiCall<Journey>('/journeys', {
     method: 'POST',
     body: JSON.stringify(data),
   });
 }
 
 export async function updateJourney(id: number, data: Partial<Journey>): Promise<Journey> {
-  return apiCall<Journey>(`/api/journeys/${id}`, {
+  return apiCall<Journey>(`/journeys/${id}`, {
     method: 'PUT',
     body: JSON.stringify(data),
   });
 }
 
 export async function deleteJourney(id: number): Promise<void> {
-  return apiCall<void>(`/api/journeys/${id}`, {
+  return apiCall<void>(`/journeys/${id}`, {
     method: 'DELETE',
   });
 }
@@ -96,29 +93,29 @@ export interface Work {
 }
 
 export async function getWorks(): Promise<Work[]> {
-  return apiCall<{ data: Work[] }>('/api/works').then(res => res.data);
+  return apiCall<{ data: Work[] }>('/works').then(res => res.data);
 }
 
 export async function getWorkById(id: number): Promise<Work> {
-  return apiCall<Work>(`/api/works/${id}`);
+  return apiCall<Work>(`/works/${id}`);
 }
 
 export async function createWork(data: Omit<Work, 'id'>): Promise<Work> {
-  return apiCall<Work>('/api/works', {
+  return apiCall<Work>('/works', {
     method: 'POST',
     body: JSON.stringify(data),
   });
 }
 
 export async function updateWork(id: number, data: Partial<Work>): Promise<Work> {
-  return apiCall<Work>(`/api/works/${id}`, {
+  return apiCall<Work>(`/works/${id}`, {
     method: 'PUT',
     body: JSON.stringify(data),
   });
 }
 
 export async function deleteWork(id: number): Promise<void> {
-  return apiCall<void>(`/api/works/${id}`, {
+  return apiCall<void>(`/works/${id}`, {
     method: 'DELETE',
   });
 }
