@@ -7,6 +7,8 @@ import { Montserrat } from "next/font/google";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import Link from "next/link";
 import { getWorks, type Work as ApiWork } from "@/lib/api";
+import Loader from "@/decoration/Loading";
+
 
 const monserratFont = Montserrat({
   subsets: ["latin"],
@@ -18,6 +20,8 @@ type Work = ApiWork;
 export default function HomePage() {
   const [works, setWorks] = useState<Work[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadedImages, setLoadedImages] = useState(0);
 
   useEffect(() => {
     async function fetchWorks() {
@@ -27,10 +31,56 @@ export default function HomePage() {
       } catch (error) {
         console.error("❌ fetchWorks error:", error);
         setWorks([]);
+      } finally {
+        setIsLoading(false)
       }
     }
     fetchWorks();
   }, []);
+
+  useEffect(() => {
+    if (works.length === 0) {
+      setLoadedImages(0);
+      return;
+    }
+
+    let isCancelled = false;
+    let loaded = 0;
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "";
+
+    function resolveCoverUrl(coverImage: string) {
+      const isAbsoluteUrl = /^https?:\/\//i.test(coverImage);
+
+      if (isAbsoluteUrl) {
+        return coverImage;
+      }
+
+      if (coverImage.startsWith("/uploads/") || coverImage.startsWith("/storage/")) {
+        return `${apiBaseUrl}${coverImage}`;
+      }
+
+      return coverImage.startsWith("/") ? coverImage : `/${coverImage}`;
+    }
+
+    works.forEach((work) => {
+      const image = new Image();
+      image.src = resolveCoverUrl(work.cover_image);
+
+      const handleDone = () => {
+        loaded += 1;
+        if (!isCancelled) {
+          setLoadedImages(loaded);
+        }
+      };
+
+      image.onload = handleDone;
+      image.onerror = handleDone;
+    });
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [works]);
 
   function handlePrev() {
     setActiveIndex((prev) =>
@@ -44,6 +94,14 @@ export default function HomePage() {
     );
   }
 
+  const allImagesLoaded = works.length === 0 || loadedImages >= works.length;
+
+  if (isLoading || !allImagesLoaded) {
+    return (
+      <Loader />
+    );
+  }
+  
   if (works.length === 0) {
     return <div className="p-10">No works available</div>;
   }
