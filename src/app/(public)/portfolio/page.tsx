@@ -115,7 +115,7 @@ export default function HomePage() {
         <NavigationBar />
       </div>
 
-      <div className="h-screen">
+      <div className="min-h-screen">
         {/* HEADER */}
         <div className="p-5 md:pl-15 md:pr-15 md:p-15">
           <div className="relative z-10 pb-2 pt-20 md:pt-28 md:pb-10">
