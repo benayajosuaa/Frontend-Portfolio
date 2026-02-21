@@ -13,18 +13,25 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "halobenaya - Benaya Josua",
-  description: "Benaya Portfolio",
+  title: {
+    default: "halobenaya – Benaya Josua",
+    template: "%s | halobenaya",
+  },
+  description:
+    "Personal portfolio of Benaya Josua, Informatics student and software engineer.",
   icons: {
     icon: "/pagar.png",
+  },
+  alternates: {
+    canonical: "https://halobenaya.com",
   },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
       <body
