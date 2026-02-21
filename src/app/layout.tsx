@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "halobenaya – Benaya Josua",
+    default: "halobenaya - Benaya Josua",
     template: "%s | halobenaya",
   },
   description:
