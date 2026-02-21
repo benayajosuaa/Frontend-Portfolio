@@ -14,11 +14,11 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "halobenaya - Benaya Josua",
-    template: "%s | halobenaya",
+    default: "halobenaya - Benaya Joshua",
+    template: "%s | halobenaya - Benaya Joshua",
   },
   description:
-    "Personal portfolio of Benaya Josua, Informatics student and software engineer.",
+    "Personal portfolio of Benaya Joshua",
   icons: {
     icon: "/pagar.png",
   },
@@ -34,9 +34,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
-        <title>halobenaya - Benaya Josua</title>
-      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
