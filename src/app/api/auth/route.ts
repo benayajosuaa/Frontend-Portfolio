@@ -12,11 +12,14 @@ export async function POST(req: NextRequest) {
 
   // Tentukan endpoint: login atau register
   let endpoint = '/api/auth/login';
-  if (body.register) {
-    endpoint = '/api/auth/register';
-    // Remove the helper flag before forwarding
-    delete body.register;
-  }
+
+
+  // === NONAKTIFKAN REGISTER ===
+  // if (body.register) {
+  //   endpoint = '/api/auth/register';
+  //   // Remove the helper flag before forwarding
+  //   delete body.register;
+  // }
 
   const res = await fetch(`${BACKEND_URL}${endpoint}`, {
     method: 'POST',
