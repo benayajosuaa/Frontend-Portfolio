@@ -101,13 +101,16 @@ export default function LoginPage() {
             >
               {loading ? "Logging in..." : "Login"}
             </button>
-            <div className="flex items-center justify-center">
+
+
+            {/* Non Aktif sementara */}
+            {/* <div className="flex items-center justify-center">
               <span>
                 kalau kamu bukan ben 
                 <span> <Link href="/register" className="text-blue-600 hover:underline">Regis </Link> </span>
                 dulu ya
                 </span>
-            </div>
+            </div> */}
           </form>
         </div>
       </div>
