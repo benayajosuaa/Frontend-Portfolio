@@ -2,24 +2,17 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, '') || 'http://localhost:8080';
 
+
 export async function POST(req: NextRequest) {
-  // Forward the request body and headers to the backend
+  // Selalu arahkan ke endpoint login backend
   const bodyText = await req.text();
   let body: any = {};
   try {
     body = JSON.parse(bodyText);
   } catch {}
 
-  // Tentukan endpoint: login atau register
-  let endpoint = '/api/auth/login';
-
-
-  // === NONAKTIFKAN REGISTER ===
-  // if (body.register) {
-  //   endpoint = '/api/auth/register';
-  //   // Remove the helper flag before forwarding
-  //   delete body.register;
-  // }
+  // Endpoint HARUS '/api/auth/login'
+  const endpoint = '/api/auth/login';
 
   const res = await fetch(`${BACKEND_URL}${endpoint}`, {
     method: 'POST',
