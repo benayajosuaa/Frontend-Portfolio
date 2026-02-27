@@ -36,14 +36,27 @@ export default function LoginPage() {
       });
 
       if (!res.ok) {
-        const message = await res.text();
-        setError(message || "Email atau password salah");
+        let message = "Email atau password salah";
+        try {
+          const errorData = await res.json();
+          message = errorData?.message || message;
+        } catch {
+          const text = await res.text();
+          if (text) message = text;
+        }
+        setError(message);
         return;
       }
 
       const data = await res.json();
-      if (data.data?.token) {
-        localStorage.setItem("token", data.data.token);
+      console.log("[login] response", data);
+      const token =
+        data?.data?.token ??
+        data?.token ??
+        data?.data?.data?.token;
+
+      if (token) {
+        localStorage.setItem("token", token);
         router.push("/admin");
       } else {
         setError("Response tidak mengandung token");

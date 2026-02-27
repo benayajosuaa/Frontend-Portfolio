@@ -1,35 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, '') || 'http://localhost:8080';
-
+const BACKEND_URL =
+  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 export async function POST(req: NextRequest) {
-  // Selalu arahkan ke endpoint login backend
-  const bodyText = await req.text();
-  let body: any = {};
-  try {
-    body = JSON.parse(bodyText);
-  } catch {}
+  const body = await req.json();
 
-  // Endpoint HARUS '/api/auth/login'
-  const endpoint = '/api/auth/login';
-
-  const res = await fetch(`${BACKEND_URL}${endpoint}`, {
+  let res = await fetch(`${BACKEND_URL}/api/auth/login`, {
     method: 'POST',
-    headers: {
-      'Content-Type': req.headers.get('content-type') || 'application/json',
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
-    credentials: 'include',
   });
 
+  if (res.status === 404) {
+    res = await fetch(`${BACKEND_URL}/api/auth?action=login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+  }
+
   const data = await res.text();
-  const response = new NextResponse(data, {
+
+  return new NextResponse(data, {
     status: res.status,
     headers: {
       'Content-Type': res.headers.get('content-type') || 'application/json',
-      'set-cookie': res.headers.get('set-cookie') || '',
     },
   });
-  return response;
 }
