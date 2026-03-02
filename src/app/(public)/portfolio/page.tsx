@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import NavigationBar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Montserrat } from "next/font/google";
-import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { MdArrowBackIos } from "react-icons/md";
+import { MdArrowForwardIos } from "react-icons/md";
 import Link from "next/link";
 import { getWorks, type Work as ApiWork } from "@/lib/api";
 import Loader from "@/decoration/Loading";
@@ -16,6 +17,11 @@ const monserratFont = Montserrat({
 });
 
 type Work = ApiWork;
+
+function truncate(text: string, max = 50) {
+  if (!text) return "";
+  return text.length > max ? `${text.slice(0, max)}...` : text;
+}
 
 export default function HomePage() {
   const [works, setWorks] = useState<Work[]>([]);
@@ -107,201 +113,223 @@ export default function HomePage() {
   }
 
   const activeWork = works[activeIndex];
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "";
+
+  function resolveCoverUrl(coverImage: string) {
+    const isAbsoluteUrl = /^https?:\/\//i.test(coverImage);
+
+    if (isAbsoluteUrl) {
+      return coverImage;
+    }
+
+    if (coverImage.startsWith("/uploads/") || coverImage.startsWith("/storage/")) {
+      return `${apiBaseUrl}${coverImage}`;
+    }
+
+    return coverImage.startsWith("/") ? coverImage : `/${coverImage}`;
+  }
 
   return (
     <div className={monserratFont.className}>
       {/* NAVBAR */}
-      <div className="fixed top-0 left-0 w-full z-20">
+      <div className="fixed top-0 left-0 w-full z-50">
         <NavigationBar />
       </div>
-
-      <div className="min-h-screen">
-        {/* HEADER */}
-        <div className="p-5 md:p-[60px]">
-          <div className="relative z-10 pb-2 pt-20 md:pt-28 md:pb-10">
-            <h1 className="font-medium text-2xl md:text-5xl">
-              what i've done
-            </h1>
-          </div>
-        </div>
-
-        {/* PORTFOLIO SECTION */}
-        <div className="">
-          <div className="flex flex-col md:flex-row ">
-            {/* Button & Image HP*/}
-            <div className="md:hidden">
-                <div className="flex flex-row w-full p-3 justify-between">
-                    <div className="">
-                        <div className="font-medium text-3xl md:text-5xl">
-                            {activeWork.title}
-                        </div>
-                    </div>
-
-                    <div>
-                        <div className="
-                            flex
-                            justify-center
-                            md:absolute
-                            md:bottom-10
-                            md:right-10
-                        ">
-                            <div className="flex flex-row text-4xl  font-thin text-gray-500 gap-6">
-                                <button onClick={handlePrev} className="hover:opacity-60">
-                                    <IoIosArrowBack />
-                                </button>
-                                <button onClick={handleNext} className="hover:opacity-60">
-                                    <IoIosArrowForward />
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+      {/* SECTION DESKTOP */}
+      <div className="min-h-screen hidden md:block">
+        {/* header */}
+        <div className="relative z-10">
+          {/* title */}
+          <div className="pt-40 p-20 pb-12 flex flex-row justify-between">
+            <div className="">
+              <h1 className="text-5xl font-medium">what ben builds</h1>
             </div>
-
-            {/* IMAGE */}
-            <div className="
-               w-full
-              h-64
-              md:w-[1500px]
-              md:h-[calc(100vh-200px)]
-              md:max-h-[600px]
-              overflow-hidden
-              bg-black
-              border
-              border-l-0
-              border-[#b3b3b3]
-              
-            ">
-              {(() => {
-                const isAbsoluteUrl = /^https?:\/\//i.test(activeWork.cover_image);
-                const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "";
-
-                if (isAbsoluteUrl) {
-                  return (
-                    <img
-                      src={activeWork.cover_image}
-                      alt={activeWork.title}
-                      className="w-full h-full object-cover transition-opacity duration-300"
-                    />
-                  );
-                }
-
-                if (
-                  activeWork.cover_image.startsWith("/uploads/") ||
-                  activeWork.cover_image.startsWith("/storage/")
-                ) {
-                  const fullImageUrl = `${apiBaseUrl}${activeWork.cover_image}`;
-                  return (
-                    <img
-                      src={fullImageUrl}
-                      alt={activeWork.title}
-                      className="w-full h-full object-cover transition-opacity duration-300"
-                    />
-                  );
-                }
-
-                const localPath = activeWork.cover_image.startsWith("/")
-                  ? activeWork.cover_image
-                  : `/${activeWork.cover_image}`;
-
-                return (
-                  <img
-                    src={localPath}
-                    alt={activeWork.title}
-                    className="w-full h-full object-cover transition-opacity duration-300"
-                  />
-                );
-              })()}
-            </div>
-
-            {/* CONTENT */}
-            <div className="p-6 md:p-10 w-full md:h-[calc(100vh-200px)] md:max-h-[600px]">
-              <div className="flex flex-col md:h-full">
-                {/* TITLE - desktop*/}
-                <div className="hidden md:flex">
-                    <div className="font-medium text-3xl md:text-5xl">
-                        {activeWork.title}
-                    </div>
+            <div className="flex items-center">
+              <div className="text-6xl flex flex-row gap-x-7">
+                <div></div>
+                <div>
+                  <button onClick={handlePrev} className="hover:opacity-60">
+                    <MdArrowBackIos />
+                  </button>
                 </div>
-
-                {/* STATUS */}
-                <div className="pt-4 md:pt-6">
-                  <span className="bg-slate-100 pl-3 pr-3 border rounded-lg p-1 text-sm md:text-lg font-medium">
-                    {activeWork.status}
-                  </span>
-                </div>
-
-                {/* EXCERPT */}
-                <div className="pt-8 pb-8 md:pt-10 text-base md:text-xl md:flex-1 md:overflow-y-auto md:pb-6 border-b">
-                  <div className="pb-2">
-                     {activeWork.excerpt}
-                  </div>
-                </div>
-
-                {/* LINKS + BUTTONS (desktop) */}
-                <div className="pt-6 mb-10 md:mb-0 md:mt-auto md:pt-6">
-                  <div className="md:flex md:items-end md:justify-between md:gap-10">
-                    <div className="flex flex-col text-sm md:text-lg gap-2">
-                      {activeWork.github_url && (
-                        <div>
-                          <span className="font-semibold">Github: </span>
-                          <Link
-                            href={activeWork.github_url}
-                            target="_blank"
-                            className="underline break-all"
-                          >
-                            {activeWork.github_url}
-                          </Link>
-                        </div>
-                      )}
-
-                      {activeWork.drive_url && (
-                        <div>
-                          <span className="font-semibold">Drive: </span>
-                          <Link
-                            href={activeWork.drive_url}
-                            target="_blank"
-                            className="underline break-all"
-                          >
-                            {activeWork.drive_url}
-                          </Link>
-                        </div>
-                      )}
-
-                      {activeWork.demo_url && (
-                        <div>
-                          <span className="font-semibold">Demo: </span>
-                          <Link
-                            href={activeWork.demo_url}
-                            target="_blank"
-                            className="underline break-all"
-                          >
-                            {activeWork.demo_url}
-                          </Link>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="hidden md:flex flex-row text-5xl md:text-7xl font-thin text-gray-500 gap-6">
-                      <button onClick={handlePrev} className="hover:opacity-60">
-                        <IoIosArrowBack />
-                      </button>
-                      <button onClick={handleNext} className="hover:opacity-60">
-                        <IoIosArrowForward />
-                      </button>
-                    </div>
-                  </div>
+                <div>
+                  <button onClick={handleNext} className="hover:opacity-60">
+                    <MdArrowForwardIos />
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         </div>
+
+        {/* content */}
+        <div>
+          <div className="relative w-screen h-170">
+            <img
+              src={resolveCoverUrl(activeWork.cover_image)}
+              className="h-170 w-screen object-cover"
+              alt={activeWork.title}
+            />
+            <div className="absolute inset-0 z-10 bg-black/50" />
+            <div className="absolute inset-0 z-20 flex  text-white text-4xl">
+              <div>
+                <div className="relative p-10 flex h-full flex-col justify-between">
+                  {/* Title */}
+                  <div className="font-extrabold">
+                    <h1 className="text-5xl">{activeWork.title}</h1>
+                  </div>
+
+                  <div className="flex flex-row justify-end items-end gap-6 gap-x-20">
+                    {/* Hyperlink */}
+                    <div className="text-xl basis-6/10">
+                      {activeWork.github_url && (
+                        <p>
+                          <span className="font-bold">Github:  </span>{" "}
+                          <Link
+                            href={activeWork.github_url}
+                            target="_blank"
+                            className="underline inline-block max-w-[60ch] truncate align-bottom"
+                            title={activeWork.github_url}
+                          >
+                            {truncate(activeWork.github_url)}
+                          </Link>
+                        </p>
+                      )}
+                      {activeWork.demo_url && (
+                        <p>
+                          <span className="font-bold">Demo:  </span>{" "}
+                          <Link
+                            href={activeWork.demo_url}
+                            target="_blank"
+                            className="underline inline-block max-w-[60ch] truncate align-bottom"
+                            title={activeWork.demo_url}
+                          >
+                            {truncate(activeWork.demo_url)}
+                          </Link>
+                        </p>
+                      )}
+                      {activeWork.drive_url && (
+                        <p>
+                          <span className="font-bold">Drive:  </span>{" "}
+                          <Link
+                            href={activeWork.drive_url}
+                            target="_blank"
+                            className="underline inline-block max-w-[60ch] truncate align-bottom"
+                            title={activeWork.drive_url}
+                          >
+                            {truncate(activeWork.drive_url)}
+                          </Link>
+                        </p>
+                      )}
+                    </div>
+                    <div className="basis-4/10 flex flex-col gap-y-4">
+                      <span>
+                        <h1 className="text-xl border inline p-1 pl-4 pr-4 rounded-lg">
+                          {activeWork.status}
+                        </h1>
+                      </span>
+                      <span>
+                        <p className="text-sm">
+                          {activeWork.excerpt}
+                        </p>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
       </div>
       
-      {/* Laboratorium */}
-      {/* <div>
+      {/* SECTION HANDPHONE*/}
+      <div className="md:hidden min-h-screen pt-28">
+        {/* header */}
+        <div className="px-6 flex items-center justify-between">
+          <h1 className="text-2xl font-medium tracking-wide">what ben builds</h1>
+          <div className="flex items-center gap-4 text-2xl">
+            <button onClick={handlePrev} className="hover:opacity-60">
+              <MdArrowBackIos />
+            </button>
+            <button onClick={handleNext} className="hover:opacity-60">
+              <MdArrowForwardIos />
+            </button>
+          </div>
+        </div>
 
-      </div> */}
+        {/* card */}
+        <div className="px-6 pt-6">
+          <div className="rounded-2xl overflow-hidden">
+            <div className="relative">
+              <img
+                src={resolveCoverUrl(activeWork.cover_image)}
+                className="w-full h-[380px] object-cover"
+                alt={activeWork.title}
+              />
+              <div className="absolute inset-0 bg-black/45" />
+              <div className="absolute inset-0 p-5 flex flex-col justify-between text-white">
+                <h2 className="text-2xl font-semibold leading-snug">
+                  {activeWork.title}
+                </h2>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="font-medium border p-1 pl-4 pr-4 rounded-lg">{activeWork.status}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white px-4 py-4 text-sm">
+              <div className="space-y-2 text-gray-600 text-base">
+                {activeWork.github_url && (
+                  <p>
+                    <span className="font-semibold">Github:</span>{" "}
+                    <Link
+                      href={activeWork.github_url}
+                      target="_blank"
+                      className="underline inline-block max-w-[20ch] truncate align-bottom"
+                      title={activeWork.github_url}
+                    >
+                      {truncate(activeWork.github_url, 40)}
+                    </Link>
+                  </p>
+                )}
+                {activeWork.demo_url && (
+                  <p>
+                    <span className="font-semibold">Demo:</span>{" "}
+                    <Link
+                      href={activeWork.demo_url}
+                      target="_blank"
+                      className="underline inline-block max-w-[20ch] truncate align-bottom"
+                      title={activeWork.demo_url}
+                    >
+                      {truncate(activeWork.demo_url, 40)}
+                    </Link>
+                  </p>
+                )}
+                {activeWork.drive_url && (
+                  <p>
+                    <span className="font-semibold">Drive:</span>{" "}
+                    <Link
+                      href={activeWork.drive_url}
+                      target="_blank"
+                      className="underline inline-block max-w-[20ch] truncate align-bottom"
+                      title={activeWork.drive_url}
+                    >
+                      {truncate(activeWork.drive_url, 40)}
+                    </Link>
+                  </p>
+                )}
+              </div>
+              <div className="border-t my-5 border-slate-500"/>
+              <div>
+                 <p className="mt-4 text-base text-justify text-gray-600">{activeWork.excerpt}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
 
       <div className="pt-20 md:pt-10">
         <Footer />
