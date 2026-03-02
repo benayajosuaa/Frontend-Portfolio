@@ -88,10 +88,10 @@ export default function JourneyPage() {
       <div className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur">
         <NavigationBar />
       </div>
-
-      <div className="pt-10 p-5 md:p-15">
-        <div className="relative z-10 pt-10 md:pt-32 pb-3 md:pb-20">
-          <h1 className="font-medium text-2xl md:text-5xl">discovery</h1>
+      
+      <div className="pt-40 p-20 pb-2 ">
+        <div>
+          <h1 className="text-5xl font-medium">discovery</h1>
         </div>
       </div>
 
