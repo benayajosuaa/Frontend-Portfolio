@@ -73,8 +73,8 @@ export default function HomePage() {
         <div className="min-h-screen">
           <div className="p-6 pt-20 md:p-20 md:pt-40">
             {/* title */}
-            <div className="pt-8 pb-10">
-              <h1 className="text-2xl md:text-3xl">
+            <div className="pb-10">
+              <h1 className="text-2xl md:text-5xl">
                 Have Something to Say ?
               </h1>
             </div>
