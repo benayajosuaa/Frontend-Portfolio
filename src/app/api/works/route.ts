@@ -1,9 +1,7 @@
+import { getBackendBaseUrl } from "../../../lib/backend";
+
 export async function GET() {
-  const baseUrl =
-    process.env.NEXT_PUBLIC_API_URL ||
-    (process.env.NODE_ENV === "development"
-      ? "http://localhost:8080"
-      : "https://portfolio-b-alpha-lilac.vercel.app");
+  const baseUrl = getBackendBaseUrl();
 
   try {
     console.log("[Works Proxy] GET request to:", `${baseUrl}/api/works`);
@@ -36,11 +34,7 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const baseUrl =
-    process.env.NEXT_PUBLIC_API_URL ||
-    (process.env.NODE_ENV === "development"
-      ? "http://localhost:8080"
-      : "https://portfolio-b-alpha-lilac.vercel.app");
+  const baseUrl = getBackendBaseUrl();
 
   try {
     // Forward all headers except host

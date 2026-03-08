@@ -1,30 +1,38 @@
+import { getBackendBaseUrl } from "../../../../lib/backend";
+
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const baseUrl =
-    process.env.NEXT_PUBLIC_API_URL ||
-    (process.env.NODE_ENV === "development"
-      ? "http://localhost:8080"
-      : "https://portfolio-b-alpha-lilac.vercel.app");
+  const baseUrl = getBackendBaseUrl();
 
-  const response = await fetch(`${baseUrl}/api/works/${id}`, {
-    method: "GET",
-    headers: {
-      Accept: "application/json",
-    },
-    cache: "no-store",
-  });
+  try {
+    const response = await fetch(`${baseUrl}/api/works/${id}`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+      cache: "no-store",
+    });
 
-  const body = await response.text();
+    const body = await response.text();
 
-  return new Response(body, {
-    status: response.status,
-    headers: {
-      "Content-Type": response.headers.get("Content-Type") || "application/json",
-    },
-  });
+    return new Response(body, {
+      status: response.status,
+      headers: {
+        "Content-Type": response.headers.get("Content-Type") || "application/json",
+      },
+    });
+  } catch (error) {
+    console.error("[Works Proxy] GET error:", error);
+    return new Response(JSON.stringify({ error: "Failed to fetch work" }), {
+      status: 500,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  }
 }
 
 export async function PUT(
@@ -32,36 +40,42 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const baseUrl =
-    process.env.NEXT_PUBLIC_API_URL ||
-    (process.env.NODE_ENV === "development"
-      ? "http://localhost:8080"
-      : "https://portfolio-b-alpha-lilac.vercel.app");
+  const baseUrl = getBackendBaseUrl();
 
-  // Forward all headers except host
-  const headers: Record<string, string> = {};
-  request.headers.forEach((value, key) => {
-    if (key.toLowerCase() !== "host") {
-      headers[key] = value;
-    }
-  });
+  try {
+    // Forward all headers except host
+    const headers: Record<string, string> = {};
+    request.headers.forEach((value, key) => {
+      if (key.toLowerCase() !== "host") {
+        headers[key] = value;
+      }
+    });
 
-  const response = await fetch(`${baseUrl}/api/works/${id}`, {
-    method: "PUT",
-    headers,
-    body: request.body,
-    // @ts-ignore - duplex is required for streaming body
-    duplex: "half",
-  });
+    const response = await fetch(`${baseUrl}/api/works/${id}`, {
+      method: "PUT",
+      headers,
+      body: request.body,
+      // @ts-ignore - duplex is required for streaming body
+      duplex: "half",
+    });
 
-  const body = await response.text();
+    const body = await response.text();
 
-  return new Response(body, {
-    status: response.status,
-    headers: {
-      "Content-Type": response.headers.get("Content-Type") || "application/json",
-    },
-  });
+    return new Response(body, {
+      status: response.status,
+      headers: {
+        "Content-Type": response.headers.get("Content-Type") || "application/json",
+      },
+    });
+  } catch (error) {
+    console.error("[Works Proxy] PUT error:", error);
+    return new Response(JSON.stringify({ error: "Failed to update work" }), {
+      status: 500,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  }
 }
 
 export async function DELETE(
@@ -69,27 +83,33 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const baseUrl =
-    process.env.NEXT_PUBLIC_API_URL ||
-    (process.env.NODE_ENV === "development"
-      ? "http://localhost:8080"
-      : "https://portfolio-b-alpha-lilac.vercel.app");
+  const baseUrl = getBackendBaseUrl();
 
-  const headers: Record<string, string> = {};
-  const auth = request.headers.get("authorization");
-  if (auth) headers["Authorization"] = auth;
+  try {
+    const headers: Record<string, string> = {};
+    const auth = request.headers.get("authorization");
+    if (auth) headers["Authorization"] = auth;
 
-  const response = await fetch(`${baseUrl}/api/works/${id}`, {
-    method: "DELETE",
-    headers,
-  });
+    const response = await fetch(`${baseUrl}/api/works/${id}`, {
+      method: "DELETE",
+      headers,
+    });
 
-  const body = await response.text();
+    const body = await response.text();
 
-  return new Response(body, {
-    status: response.status,
-    headers: {
-      "Content-Type": response.headers.get("Content-Type") || "application/json",
-    },
-  });
+    return new Response(body, {
+      status: response.status,
+      headers: {
+        "Content-Type": response.headers.get("Content-Type") || "application/json",
+      },
+    });
+  } catch (error) {
+    console.error("[Works Proxy] DELETE error:", error);
+    return new Response(JSON.stringify({ error: "Failed to delete work" }), {
+      status: 500,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  }
 }

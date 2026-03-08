@@ -7,8 +7,9 @@
  * - Di server (route handlers / server runtime), boleh panggil backend langsung.
  */
 
-const BACKEND_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "https://portfolio-b-alpha-lilac.vercel.app";
+import { getBackendBaseUrl } from "./backend";
+
+const BACKEND_BASE_URL = getBackendBaseUrl();
 
 const API_BASE_URL = typeof window === "undefined" ? BACKEND_BASE_URL : "";
 

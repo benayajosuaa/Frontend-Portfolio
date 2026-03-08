@@ -1,9 +1,7 @@
+import { getBackendBaseUrl } from "../../../lib/backend";
+
 export async function GET(request: Request) {
-  const baseUrl =
-    process.env.NEXT_PUBLIC_API_URL ||
-    (process.env.NODE_ENV === "development"
-      ? "http://localhost:8080"
-      : "https://portfolio-b-alpha-lilac.vercel.app");
+  const baseUrl = getBackendBaseUrl();
 
   try {
     // Forward Authorization header if present (for admin fetch)
@@ -43,11 +41,7 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const baseUrl =
-    process.env.NEXT_PUBLIC_API_URL ||
-    (process.env.NODE_ENV === "development"
-      ? "http://localhost:8080"
-      : "https://portfolio-b-alpha-lilac.vercel.app");
+  const baseUrl = getBackendBaseUrl();
 
   try {
     // Forward all headers except host
