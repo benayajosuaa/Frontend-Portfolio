@@ -43,6 +43,8 @@ export default function Footer() {
               <Link href="https://medium.com/@benaya.josua" target="_blank" className="hover:opacity-60 transition">Medium</Link>
             </div>
 
+            
+
             <div className="flex">
                 {/* Desktop text links */}
                 <div className="hidden md:flex flex-col gap-y-2">
@@ -67,6 +69,8 @@ export default function Footer() {
                         <Link href="https://open.spotify.com/user/zeqxqspvmhgqmlkafjcrcx3n6" target="_blank"> <AiFillSpotify /> </Link>
                     </span>
                 </div>
+
+                
 
             </div>
 
