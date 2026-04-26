@@ -200,32 +200,13 @@ export default function DuduPage() {
         >
           <div className="mb-4 flex w-full max-w-4xl flex-col gap-4 px-1 sm:mb-8 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
             <div className={`${displayFont.className} max-w-xl text-center sm:text-left`}>
-              <p className="text-[0.65rem] uppercase tracking-[0.34em] text-[#86614b]/80 sm:text-sm sm:tracking-[0.42em]">
-                Dudu for Kina
+              <p className="text-2xl uppercase tracking-[0.34em] text-[#86614b]/80 sm:text-xl sm:tracking-[0.42em]">
+                Titip Pesan
               </p>
-              <h1 className="mt-2 text-[2.2rem] font-semibold leading-[0.9] text-[#5b3928] sm:text-5xl">
-                Swipe to unwrap a tiny chocolate note.
-              </h1>
+              
             </div>
 
-            <div className="flex items-center justify-center gap-2 sm:justify-end">
-              <button
-                type="button"
-                onClick={() => setAudioEnabled((value) => !value)}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#8d6549]/20 bg-white/55 text-[#6d4732] shadow-[0_10px_24px_rgba(103,68,45,0.12)] backdrop-blur transition hover:bg-white/80 sm:h-10 sm:w-10"
-                aria-label={audioEnabled ? "Mute soft sound" : "Enable soft sound"}
-              >
-                {audioEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
-              </button>
-              <button
-                type="button"
-                onClick={restartScene}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#8d6549]/20 bg-white/55 text-[#6d4732] shadow-[0_10px_24px_rgba(103,68,45,0.12)] backdrop-blur transition hover:bg-white/80 sm:h-10 sm:w-10"
-                aria-label="Restart animation"
-              >
-                <RotateCcw size={16} />
-              </button>
-            </div>
+       
           </div>
 
           <div className="relative mt-4 flex w-full flex-col items-center justify-center sm:mt-10">
@@ -272,24 +253,24 @@ export default function DuduPage() {
                         stiffness: 190,
                         damping: 18,
                       }}
-                      className="absolute left-1/2 top-[3%] z-20 w-[64%] max-w-[13rem] -translate-x-1/2 sm:top-[2%] sm:w-[58%] sm:max-w-[15rem]"
+                      className="absolute left-1/2 top-[2%] z-20 w-[76%] max-w-[16rem] -translate-x-1/2 sm:top-[1%] sm:w-[68%] sm:max-w-[18rem]"
                     >
                       <button
                         type="button"
                         onPointerDown={startNoteDrag}
                         disabled={!wrapperOpened}
-                        className="group relative grid aspect-square w-full grid-rows-[auto_1fr] overflow-hidden touch-none rounded-[1.3rem] bg-[#f7de67] px-4 pb-4 pt-4 text-left shadow-[0_18px_30px_rgba(98,75,21,0.24)] outline-none ring-1 ring-[#c09d24]/16 sm:rounded-[1.5rem] sm:px-5 sm:pb-5 sm:pt-5 sm:shadow-[0_20px_34px_rgba(98,75,21,0.24)]"
+                        className="group relative grid aspect-[0.96] w-full grid-rows-[auto_1fr] overflow-hidden touch-none rounded-[1.3rem] bg-[#f7de67] px-4 pb-4 pt-4 text-left shadow-[0_18px_30px_rgba(98,75,21,0.24)] outline-none ring-1 ring-[#c09d24]/16 sm:aspect-[0.9] sm:rounded-[1.5rem] sm:px-5 sm:pb-5 sm:pt-5 sm:shadow-[0_20px_34px_rgba(98,75,21,0.24)]"
                         aria-label="Tarik sticky note"
                       >
                         <div className="absolute inset-x-[18%] top-2 h-5 rounded-full bg-white/35 blur-xl" />
                         <div className="absolute right-3 top-3 h-8 w-8 rounded-full bg-white/30 blur-lg" />
-                        <div className="mb-2 flex items-center justify-between text-[0.52rem] uppercase tracking-[0.24em] text-[#8c6d08]/65 sm:mb-3 sm:text-[0.66rem] sm:tracking-[0.3em]">
-                          <span>Pull me</span>
-                          <span>{wrapperOpened ? "For Kina" : ""}</span>
-                        </div>
+                        {!noteOpened && (
+                          <div className="mb-2 flex items-center justify-between text-[0.52rem] uppercase tracking-[0.24em] text-[#8c6d08]/65 sm:mb-3 sm:text-[0.66rem] sm:tracking-[0.3em]">
+                            <span>Swipe ke atas </span>
+                          </div>
+                        )}
                         <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden">
-                          <div className="max-w-[8.4rem] text-[0.62rem] leading-[1.28] text-[#815f08]/58 sm:max-w-[10.5rem] sm:text-[0.74rem] sm:leading-[1.36]">
-                            a tiny soft note waiting inside this chocolate wrap
+                          <div className="max-w-[12rem] text-[0.62rem] leading-[1.28] text-[#815f08]/58 sm:max-w-[14rem] sm:text-[0.74rem] sm:leading-[1.36]">
                           </div>
                           <AnimatePresence>
                             {noteProgress > 0.04 && (
@@ -302,13 +283,22 @@ export default function DuduPage() {
                                 className="relative mt-auto overflow-hidden"
                               >
                                 <div
-                                  className={`${handwritingFont.className} relative max-w-[8.6rem] text-[1.02rem] leading-[0.92] text-[#6f4d02] sm:max-w-[10.5rem] sm:text-[1.55rem] sm:leading-[0.94]`}
+                                  className={`${handwritingFont.className} relative max-w-[12.5rem] text-[0.98rem] leading-[0.98] text-[#6f4d02] sm:max-w-[14.5rem] sm:text-[1.22rem] sm:leading-[1.02]`}
                                   style={{
                                     clipPath: `inset(0 ${100 - noteProgress * 100}% 0 0)`,
                                     textShadow: `0 0 20px rgba(255, 244, 184, ${glowOpacity * 0.34})`,
                                   }}
                                 >
                                   Semangat Kina menjalani pekan UAS nya
+                                  <br />
+                                  <br />
+                                  ...
+                                  <br />
+                                  <br />
+                                  "Segala sesuatu yang dijumpai tanganmu untuk
+                                  dikerjakan, kerjakanlah itu sekuat tenaga"
+                                  <br />
+                                  -Pengkhotbah 9:10
                                 </div>
                               </motion.div>
                             )}
@@ -389,14 +379,14 @@ export default function DuduPage() {
                     <div className="absolute inset-x-[20%] bottom-3 h-2 rounded-full bg-white/22 blur-md" />
                     <div className="absolute inset-x-[14%] top-[17%] rounded-[1.25rem] border border-[#ffd7b0]/16 bg-[#f5d4ac]/10 px-3 py-4 text-center text-[#f7ead8] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] sm:rounded-[1.8rem] sm:px-5 sm:py-7">
                       <div className={`${displayFont.className} text-sm font-semibold tracking-[0.26em] text-[#ffe8c6] drop-shadow-[0_1px_10px_rgba(95,21,41,0.35)] sm:text-xl sm:tracking-[0.34em]`}>
-                        DUDU
+                        CHOCOUP
                       </div>
                       <div className="mt-1 text-[0.42rem] uppercase tracking-[0.28em] text-[#ffd8bb] sm:mt-2 sm:text-[0.62rem] sm:tracking-[0.44em]">
                         milk chocolate
                       </div>
                     </div>
                     <div className="absolute left-[7%] top-[12%] rounded-full border border-[#ffd27d]/30 bg-[#f6c95e]/14 px-2 py-1 text-[0.42rem] font-semibold uppercase tracking-[0.18em] text-[#ffe7a7] shadow-[0_8px_14px_rgba(73,18,34,0.18)] sm:left-[8%] sm:top-[14%] sm:px-3 sm:text-[0.56rem] sm:tracking-[0.28em]">
-                      legenda manis
+                      #tetap_berarti
                     </div>
                   </motion.div>
 
@@ -426,25 +416,27 @@ export default function DuduPage() {
                     <div className="absolute inset-x-[13%] bottom-[18%] h-[1px] bg-white/12" />
                   </motion.div>
 
-                  <motion.button
-                    type="button"
-                    onPointerDown={startWrapperDrag}
-                    aria-label="Swipe to tear wrapper"
-                    animate={{
-                      scaleX: 1 + wrapperProgress * 0.06,
-                      opacity: 1 - wrapperProgress * 0.74,
-                    }}
-                    transition={{ type: "spring", stiffness: 260, damping: 24 }}
-                    className="absolute inset-x-[8%] top-1/2 z-30 flex h-12 -translate-y-1/2 touch-none items-center justify-center rounded-full bg-transparent outline-none sm:inset-x-[10%]"
-                  >
-                    <div className="relative flex w-full items-center justify-center">
-                      <div className="absolute inset-x-0 h-[2px] border-t-2 border-dashed border-[#e8cdb6]/95" />
-                      <div className="absolute inset-x-[18%] h-4 rounded-full bg-white/14 blur-md" />
-                      <div className="relative mt-7 rounded-full border border-white/20 bg-white/8 px-2.5 py-1 text-[0.46rem] uppercase tracking-[0.24em] text-[#f9e8da] shadow-[0_8px_16px_rgba(44,21,14,0.14)] sm:mt-10 sm:px-3 sm:text-[0.55rem] sm:tracking-[0.38em]">
-                        swipe here
+                  {!wrapperOpened && (
+                    <motion.button
+                      type="button"
+                      onPointerDown={startWrapperDrag}
+                      aria-label="Swipe to tear wrapper"
+                      animate={{
+                        scaleX: 1 + wrapperProgress * 0.06,
+                        opacity: 1 - wrapperProgress * 0.74,
+                      }}
+                      transition={{ type: "spring", stiffness: 260, damping: 24 }}
+                      className="absolute inset-x-[8%] top-1/2 z-30 flex h-12 -translate-y-1/2 touch-none items-center justify-center rounded-full bg-transparent outline-none sm:inset-x-[10%]"
+                    >
+                      <div className="relative flex w-full items-center justify-center">
+                        <div className="absolute inset-x-0 h-[2px] border-t-2 border-dashed border-[#e8cdb6]/95" />
+                        <div className="absolute inset-x-[18%] h-4 rounded-full bg-white/14 blur-md" />
+                        <div className="relative mt-7 rounded-full border border-white/20 bg-white/8 px-2.5 py-1 text-[0.46rem] uppercase tracking-[0.24em] text-[#f9e8da] shadow-[0_8px_16px_rgba(44,21,14,0.14)] sm:mt-10 sm:px-3 sm:text-[0.55rem] sm:tracking-[0.38em]">
+                          swipe here
+                        </div>
                       </div>
-                    </div>
-                  </motion.button>
+                    </motion.button>
+                  )}
 
                   <motion.div
                     aria-hidden="true"
